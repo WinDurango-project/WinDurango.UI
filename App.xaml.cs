@@ -10,13 +10,13 @@ namespace WinDurango.UI
     {
         private static readonly FileVersionInfo Fvi = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
         public static readonly string DataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "WinDurango");
-        public static readonly MainWindow MainWindow = new();
         public static readonly uint Major = (uint)Fvi.ProductMajorPart;
         public static readonly uint Minor = (uint)Fvi.ProductMinorPart;
         public static readonly uint Patch = (uint)Fvi.ProductBuildPart;
         public static readonly string Hash = Fvi.ProductVersion.Split("+")[1][..7];
         public static readonly uint VerPacked = (Major << 22) | (Minor << 12) | Patch;
         public static readonly string Version = $"{Fvi.ProductMajorPart}.{Fvi.ProductMinorPart}.{Fvi.ProductBuildPart}_{Hash}"; // 1.0 will be when bugs are squashed and everything works correctly.
+        public static readonly MainWindow MainWindow = new();
 
         public static (uint major, uint minor, uint patch) UnpackVersion(uint verPacked)
         {

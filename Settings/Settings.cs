@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
+using WinDurango.UI.Dialogs;
 
 namespace WinDurango.UI.Settings;
 
@@ -17,8 +18,8 @@ public class WdSettingsData
         MicaAlt
     }
 
-    public uint SaveVersion { get; set; }
-    public ThemeSetting Theme { get; set; }
+    public uint SaveVersion { get; set; } = App.VerPacked;
+    public ThemeSetting Theme { get; set; } = ThemeSetting.Fluent;
 }
 
 public class WdSettings
@@ -28,6 +29,7 @@ public class WdSettings
 
     public WdSettings()
     {
+        Settings = GetDefaults();
         if (!Directory.Exists(App.DataDir))
             Directory.CreateDirectory(App.DataDir);
 
@@ -44,7 +46,9 @@ public class WdSettings
                     {
                         BackupSettings();
                         GenerateSettings();
+                        Debug.WriteLine($"Settings were reset due to the settings file version being too new. ({loadedSettings.SaveVersion})");
                     }
+                    loadedSettings = JsonSerializer.Deserialize<WdSettingsData>(json);
                     Settings = loadedSettings;
                 }
             }
@@ -67,19 +71,11 @@ public class WdSettings
 
     private async void GenerateSettings()
     {
-        WdSettingsData defaultSettings = GetDefaults();
-        Settings = defaultSettings;
+        Settings = GetDefaults();
         await SaveSettings();
     }
 
-    private static WdSettingsData GetDefaults()
-    {
-        return new WdSettingsData
-        {
-            SaveVersion = App.VerPacked,
-            Theme = WdSettingsData.ThemeSetting.Fluent
-        };
-    }
+    private static WdSettingsData GetDefaults() => new WdSettingsData();
 
     public void MigrateSettings()
     {

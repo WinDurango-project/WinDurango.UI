@@ -12,8 +12,8 @@ namespace WinDurango.UI
 {
     public sealed partial class MainWindow : Window
     {
-        public static readonly WdSettings Settings = new();
         public readonly string AppName = "WinDurango";
+        public static readonly WdSettings Settings = new();
         public AppsListPage AppsListPage;
         public SettingsPage SettingsPage;
         public AboutPage AboutPage;
