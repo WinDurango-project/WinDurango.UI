@@ -15,7 +15,9 @@ namespace WinDurango.UI
         public static readonly uint Major = (uint)Fvi.ProductMajorPart;
         public static readonly uint Minor = (uint)Fvi.ProductMinorPart;
         public static readonly uint Patch = (uint)Fvi.ProductBuildPart;
-        public static readonly string Hash = Fvi.ProductVersion.Split("+")[1][..7];
+        public static readonly string Hash = Fvi.ProductVersion.Contains("+")
+                    ? Fvi.ProductVersion.Split("+")[1][..7]
+                    : "HASHFAIL";
         public static readonly uint VerPacked = (Major << 22) | (Minor << 12) | Patch;
         public static readonly string Version = $"{Fvi.ProductMajorPart}.{Fvi.ProductMinorPart}.{Fvi.ProductBuildPart}_{Hash}"; // 1.0 will be when bugs are squashed and everything works correctly.
         public static readonly MainWindow MainWindow = new();
