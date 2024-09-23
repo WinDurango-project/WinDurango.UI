@@ -1,0 +1,86 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+<PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows10.0.22621.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
+    <RootNamespace>WinDurango.UI</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Platforms>x86;x64;ARM64</Platforms>
+    <RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
+    <UseWinUI>True</UseWinUI>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+	<IncludeSourceRevisionInInformationalVersion>true</IncludeSourceRevisionInInformationalVersion>
+    <XamlDebuggingInformation>True</XamlDebuggingInformation>
+    <DisableXbfLineInfo>False</DisableXbfLineInfo>
+    <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+	<Version>0.0.1</Version>
+	<AssemblyVersion>$(Version)</AssemblyVersion>
+</PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Theming\**" />
+    <Content Remove="Theming\**" />
+    <EmbeddedResource Remove="Theming\**" />
+    <None Remove="Theming\**" />
+    <Page Remove="Theming\**" />
+    <PRIResource Remove="Theming\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Controls\GameContainer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Assets\icon.svg" />
+    <None Remove="Controls\AppTile.xaml" />
+    <None Remove="Controls\ContributorInfo.xaml" />
+    <None Remove="Controls\NewFile1.txt" />
+    <None Remove="Pages\AboutPage.xaml" />
+    <None Remove="Pages\AppsListPage.xaml" />
+    <None Remove="Pages\SettingsPage.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Uwp.Controls.Primitives" Version="8.1.240821" />
+    <PackageReference Include="DotNetProjects.SVGImage" Version="5.2.1" />
+    <PackageReference Include="Microsoft.UI.Xaml" Version="2.8.6" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.756" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240802000" />
+    <PackageReference Include="System.DirectoryServices" Version="8.0.0" />
+    <PackageReference Include="System.DirectoryServices.AccountManagement" Version="8.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.8" />
+    <Manifest Include="$(ApplicationManifest)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Assets\icon.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Controls\ContributorInfo.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Pages\AboutPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Pages\SettingsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Pages\AppsListPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Controls\AppTile.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+</Project>

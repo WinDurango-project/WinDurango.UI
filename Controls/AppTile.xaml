@@ -1,0 +1,34 @@
+﻿<StackPanel
+    x:Class="WinDurango.UI.Controls.AppTile"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WinDurango.UI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Margin="10, 10, 10, 10"
+    >
+    <Button Width="320" Height="180" Padding="0" Name="startButton" CornerRadius="5, 5, 0, 0" BorderThickness="0" Background="{ThemeResource SystemControlAltLowAcrylicElementBrush}" >
+        <Image x:Name="appLogo"/>
+    </Button>
+    <Expander CornerRadius="0, 0, 5, 5" Width="320" Name="infoExpander">
+        <Grid Name="expanderControls" Width="320">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid Name="expanderButtons" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="unregisterButton" Grid.Column="0" Content="Unregister" HorizontalAlignment="Center" Click="HandleUnregister"/>
+                <Button x:Name="viewFolderButton" Grid.Column="1" Content="View Folder" HorizontalAlignment="Center" Click="OpenFolder"/>
+            </Grid>
+            <StackPanel Grid.Row="0">
+                <TextBlock x:Name="expanderVersion" Margin="10 0 0 10"/>
+            </StackPanel>
+        </Grid>
+    </Expander>
+</StackPanel>
+

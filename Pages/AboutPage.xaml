@@ -1,0 +1,30 @@
+﻿<Page
+    x:Class="WinDurango.UI.Pages.AboutPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WinDurango.UI.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:appLocal="using:WinDurango.UI"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:controls="using:WinDurango.UI.Controls" xmlns:svg="using:SVGImage.SVG"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <StackPanel Orientation="Vertical" Padding="10">
+        <TextBlock Text="Application Info" FontSize="24"/>
+        <controls:ContributorInfo Margin="0 10 10 10" x:Name="windurango_Info" HorizontalAlignment="Left"/>
+        <TextBlock Text="UI Lead Developers" FontSize="24"/>
+        <StackPanel Orientation="Horizontal">
+            <controls:ContributorInfo Margin="0 10 10 10" x:Name="dexrn_Info" HorizontalAlignment="Left"/>
+            <controls:ContributorInfo Margin="0 10 10 10" x:Name="danilwhale_Info" HorizontalAlignment="Left"/>
+        </StackPanel>
+
+        <TextBlock Text="Repo Contributors" FontSize="24"/>
+        <TextBlock>
+            <Run Text="Coming soon (maybe)"/>
+            <LineBreak/>
+            <Run Text="contrib.rocks apparently returns some svg instead of a png..."/>
+            <LineBreak/>
+            <Run Text="which makes it hard for me to use here."/>
+        </TextBlock>
+    </StackPanel>
+</Page>
