@@ -20,9 +20,9 @@ namespace WinDurango.UI
 
         public static (uint major, uint minor, uint patch) UnpackVersion(uint verPacked)
         {
-            uint major = (verPacked >> 22) & 0x3FF; 
-            uint minor = (verPacked >> 12) & 0x3FF;  
-            uint patch = verPacked & 0xFFF;         
+            uint major = (verPacked >> 22) & 0x3FF;
+            uint minor = (verPacked >> 12) & 0x3FF;
+            uint patch = verPacked & 0xFFF;
 
             return (major, minor, patch);
         }

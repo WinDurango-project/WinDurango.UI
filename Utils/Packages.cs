@@ -123,7 +123,7 @@ namespace WinDurango.UI.Utils
 
             var status = new ProgressDialog($"Installing package...", "Installing", false);
             App.MainWindow.DispatcherQueue.TryEnqueue(async () => await status.ShowAsync());
-            PackageManager pm = new PackageManager();
+            PackageManager pm = new();
             try
             {
                 status.Text = "Reading manifest...";
@@ -187,7 +187,7 @@ namespace WinDurango.UI.Utils
         {
             var status = new ProgressDialog($"Uninstalling {package.DisplayName}...", "Uninstalling", false);
             App.MainWindow.DispatcherQueue.TryEnqueue(async () => await status.ShowAsync());
-            PackageManager pm = new PackageManager();
+            PackageManager pm = new();
             try
             {
                 var undeployment = await pm.RemovePackageAsync(package.Id.FullName, RemovalOptions.PreserveApplicationData);
@@ -212,12 +212,7 @@ namespace WinDurango.UI.Utils
             var packageManager = new PackageManager();
             var packages = packageManager.FindPackagesForUser(null, familyName);
 
-            if (packages == null || !packages.Any())
-            {
-                return null;
-            }
-
-            return packages.First();
+            return packages == null || !packages.Any() ? null : packages.First();
         }
 
         public static Package GetMostRecentlyInstalledPackage()
