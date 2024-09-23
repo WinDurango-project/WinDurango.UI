@@ -47,7 +47,7 @@ namespace WinDurango.UI.Utils
             }
 
             string package = await InstallPackageAsync(new Uri(mountDir + "\\AppxManifest.xml", UriKind.Absolute));
-            var newPackage = InstalledPackages.GetInstalledPackage(package).Value;
+            var (familyName, installedPackage) = InstalledPackages.GetInstalledPackage(package).Value;
 
             if (hasExvd)
             {
@@ -59,8 +59,8 @@ namespace WinDurango.UI.Utils
                         continue;
 
                     FileSystemInfo symlink = File.CreateSymbolicLink(Path.Combine(mountDir, fileName), filePath);
-                    newPackage.installedPackage.SymlinkedDLLs.Add(symlink.Name);
-                    InstalledPackages.UpdateInstalledPackage(newPackage.familyName, newPackage.installedPackage);
+                    installedPackage.SymlinkedDLLs.Add(symlink.Name);
+                    InstalledPackages.UpdateInstalledPackage(familyName, installedPackage);
                 }
             }
         }
@@ -122,7 +122,7 @@ namespace WinDurango.UI.Utils
 
 
             var status = new ProgressDialog($"Installing package...", "Installing", false);
-            App.MainWindow.DispatcherQueue.TryEnqueue(async () => await status.ShowAsync());
+            _ = App.MainWindow.DispatcherQueue.TryEnqueue(async () => await status.ShowAsync());
             PackageManager pm = new();
             try
             {
@@ -186,7 +186,7 @@ namespace WinDurango.UI.Utils
         public static async Task RemovePackage(Package package)
         {
             var status = new ProgressDialog($"Uninstalling {package.DisplayName}...", "Uninstalling", false);
-            App.MainWindow.DispatcherQueue.TryEnqueue(async () => await status.ShowAsync());
+            _ = App.MainWindow.DispatcherQueue.TryEnqueue(async () => await status.ShowAsync());
             PackageManager pm = new();
             try
             {

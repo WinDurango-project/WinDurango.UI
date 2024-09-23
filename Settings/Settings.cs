@@ -57,7 +57,6 @@ public class WdSettings
         }
         else
         {
-            BackupSettings();
             GenerateSettings();
         }
     }

@@ -44,8 +44,10 @@ namespace WinDurango.UI.Pages
 
         private async void installButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            var picker = new FolderPicker();
-            picker.SuggestedStartLocation = PickerLocationId.Desktop;
+            var picker = new FolderPicker
+            {
+                SuggestedStartLocation = PickerLocationId.Desktop
+            };
             picker.FileTypeFilter.Add("*");
 
             var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.MainWindow);
@@ -61,7 +63,7 @@ namespace WinDurango.UI.Pages
 
                 if (File.Exists(manifest))
                 {
-                    await Packages.InstallPackageAsync(new Uri(manifest, UriKind.Absolute));
+                    _ = await Packages.InstallPackageAsync(new Uri(manifest, UriKind.Absolute));
                 }
                 else
                 {
@@ -74,7 +76,7 @@ namespace WinDurango.UI.Pages
                             // there is an AppxManifest inside.
                             var confirmation = new Confirmation($"There was no AppxManifest found inside the picked folder.\nHowever there was one found inside the Mount folder, would you like to register that?", "Install from Mount?");
                             if (await confirmation.Show() == Dialog.BtnClicked.Yes)
-                                await Packages.InstallXPackageAsync((folder.Path).ToString());
+                                await Packages.InstallXPackageAsync(folder.Path.ToString());
                         }
                         else
                         {

@@ -22,7 +22,7 @@ namespace WinDurango.UI
         {
             if (args.IsSettingsInvoked == true)
             {
-                contentFrame.Navigate(typeof(SettingsPage));
+                _ = contentFrame.Navigate(typeof(SettingsPage));
             }
             else if (args.InvokedItemContainer is NavigationViewItem item)
             {
@@ -46,8 +46,7 @@ namespace WinDurango.UI
 
         public void ReloadAppList()
         {
-            if (AppsListPage != null)
-                AppsListPage.InitAppList();
+            AppsListPage?.InitAppList();
         }
 
         public void LoadSettings()
@@ -75,11 +74,7 @@ namespace WinDurango.UI
             Title = AppName;
 
             // setup theme and titlebar
-            AppWindow appWindow = this.AppWindow;
             ExtendsContentIntoTitleBar = true;
-
-            Microsoft.UI.Composition.Compositor compositor = this.Compositor;
-
             this.Activate();
             LoadSettings();
 

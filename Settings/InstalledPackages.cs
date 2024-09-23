@@ -23,7 +23,7 @@ namespace WinDurango.UI.Settings
             string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "WinDurango");
             if (!Directory.Exists(path))
             {
-                Directory.CreateDirectory(path);
+                _ = Directory.CreateDirectory(path);
             }
 
             string filePath = Path.Combine(path, "InstalledPackages.json");
@@ -31,18 +31,16 @@ namespace WinDurango.UI.Settings
             if (!File.Exists(filePath))
             {
                 Debug.WriteLine("Could not get the list of installed packages!");
-                using (StreamWriter writer = File.CreateText(filePath))
-                {
-                    writer.WriteLine("{}");
-                }
+                using StreamWriter writer = File.CreateText(filePath);
+                writer.WriteLine("{}");
             }
 
             string json = File.ReadAllText(filePath);
-            var installedPkgs = JsonSerializer.Deserialize<Dictionary<string, InstalledPackage>>(json) ?? new Dictionary<string, InstalledPackage>();
+            var installedPkgs = JsonSerializer.Deserialize<Dictionary<string, InstalledPackage>>(json) ?? [];
 
             if (installedPkgs.TryGetValue(pkg.Id.FamilyName, out var package) && package.FullName == pkg.Id.FullName)
             {
-                installedPkgs.Remove(pkg.Id.FamilyName);
+                _ = installedPkgs.Remove(pkg.Id.FamilyName);
             }
             else
             {
@@ -59,7 +57,7 @@ namespace WinDurango.UI.Settings
         {
             if (!Directory.Exists(App.DataDir))
             {
-                Directory.CreateDirectory(App.DataDir);
+                _ = Directory.CreateDirectory(App.DataDir);
             }
 
             string filePath = Path.Combine(App.DataDir, "InstalledPackages.json");
@@ -67,16 +65,14 @@ namespace WinDurango.UI.Settings
             if (!File.Exists(filePath))
             {
                 Debug.WriteLine("Could not get the list of installed packages!");
-                using (StreamWriter writer = File.CreateText(filePath))
-                {
-                    writer.WriteLine("{}");
-                }
+                using StreamWriter writer = File.CreateText(filePath);
+                writer.WriteLine("{}");
             }
 
             string json = File.ReadAllText(filePath);
 
             Dictionary<string, InstalledPackage> installedPkgs = JsonSerializer.Deserialize<Dictionary<string, InstalledPackage>>(json)
-                                ?? new Dictionary<string, InstalledPackage>();
+                                ?? [];
 
             return installedPkgs;
         }
@@ -137,7 +133,7 @@ namespace WinDurango.UI.Settings
             string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "WinDurango");
             if (!Directory.Exists(path))
             {
-                Directory.CreateDirectory(path);
+                _ = Directory.CreateDirectory(path);
             }
 
             string filePath = Path.Combine(path, "InstalledPackages.json");
@@ -145,14 +141,12 @@ namespace WinDurango.UI.Settings
             if (!File.Exists(filePath))
             {
                 Debug.WriteLine("Could not get the list of installed packages!");
-                using (StreamWriter writer = File.CreateText(filePath))
-                {
-                    writer.WriteLine("{}");
-                }
+                using StreamWriter writer = File.CreateText(filePath);
+                writer.WriteLine("{}");
             }
 
             string json = File.ReadAllText(filePath);
-            var installedPkgs = JsonSerializer.Deserialize<Dictionary<string, InstalledPackage>>(json) ?? new Dictionary<string, InstalledPackage>();
+            var installedPkgs = JsonSerializer.Deserialize<Dictionary<string, InstalledPackage>>(json) ?? [];
 
             if (installedPkgs.ContainsKey(package.Id.FamilyName))
             {
@@ -162,7 +156,7 @@ namespace WinDurango.UI.Settings
             installedPkgs[package.Id.FamilyName] = new InstalledPackage
             {
                 FullName = package.Id.FullName,
-                SymlinkedDLLs = new List<string>()
+                SymlinkedDLLs = []
             };
 
             string updated = JsonSerializer.Serialize(installedPkgs, new JsonSerializerOptions { WriteIndented = true });

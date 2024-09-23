@@ -83,4 +83,12 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="D:\Projects\Dev\C#\WinDurango.UI\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="D:\Projects\Dev\C#\WinDurango.UI\.editorconfig" />
+  </ItemGroup>
 </Project>

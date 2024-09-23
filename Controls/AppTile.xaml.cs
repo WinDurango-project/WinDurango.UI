@@ -32,7 +32,7 @@ namespace WinDurango.UI.Controls
 
         private void OpenFolder(object sender, RoutedEventArgs e)
         {
-            Process.Start(new ProcessStartInfo(_package.InstalledPath) { UseShellExecute = true });
+            _ = Process.Start(new ProcessStartInfo(_package.InstalledPath) { UseShellExecute = true });
         }
 
         public AppTile(string familyName)
@@ -66,10 +66,7 @@ namespace WinDurango.UI.Controls
             StackPanel rcOptions = new();
             Button rcUnregisterButton = new() { Content = "Remove" };
 
-            rcUnregisterButton.Tapped += (s, e) =>
-            {
-                HandleUnregister(s, e);
-            };
+            rcUnregisterButton.Tapped += HandleUnregister;
 
             rcOptions.Children.Add(rcUnregisterButton);
             rcFlyout.Content = rcOptions;
@@ -86,7 +83,7 @@ namespace WinDurango.UI.Controls
             {
                 var hasLaunched = await firstAppListEntry.LaunchAsync();
                 if (hasLaunched == false)
-                    new NoticeDialog($"Failed to launch \"{_package.DisplayName}\"!");
+                    _ = new NoticeDialog($"Failed to launch \"{_package.DisplayName}\"!");
             };
         }
     }

@@ -46,7 +46,7 @@ namespace WinDurango.UI.Dialogs
 
         public string Text
         {
-            get { return _text; }
+            get => _text;
             set
             {
                 _text = value;
@@ -56,7 +56,7 @@ namespace WinDurango.UI.Dialogs
 
         public double Progress
         {
-            get { return _progress; }
+            get => _progress;
             set
             {
                 _progress = value;

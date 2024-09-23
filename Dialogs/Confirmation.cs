@@ -40,7 +40,7 @@ namespace WinDurango.UI.Dialogs
 
         public string Content
         {
-            get { return _content; }
+            get => _content;
             set
             {
                 _content = value;
@@ -50,7 +50,7 @@ namespace WinDurango.UI.Dialogs
 
         public string Title
         {
-            get { return _title; }
+            get => _title;
             set
             {
                 _title = value;
