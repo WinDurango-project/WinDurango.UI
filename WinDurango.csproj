@@ -14,7 +14,7 @@
     <DisableXbfLineInfo>False</DisableXbfLineInfo>
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
     <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
-	<Version>0.0.1</Version>
+	<Version>0.0.2</Version>
 	<AssemblyVersion>$(Version)</AssemblyVersion>
 </PropertyGroup>
 

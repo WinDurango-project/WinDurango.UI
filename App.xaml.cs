@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using WinDurango.UI.Utils;
 
 namespace WinDurango.UI
 {
@@ -10,6 +11,7 @@ namespace WinDurango.UI
     {
         private static readonly FileVersionInfo Fvi = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
         public static readonly string DataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "WinDurango");
+        public static readonly Logger logger = new Logger();
         public static readonly uint Major = (uint)Fvi.ProductMajorPart;
         public static readonly uint Minor = (uint)Fvi.ProductMinorPart;
         public static readonly uint Patch = (uint)Fvi.ProductBuildPart;
@@ -34,6 +36,7 @@ namespace WinDurango.UI
 
         protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
+            logger.WriteDebug("Showing MainWindow");
             MainWindow.Activate();
         }
     }

@@ -30,7 +30,7 @@ namespace WinDurango.UI.Settings
 
             if (!File.Exists(filePath))
             {
-                Debug.WriteLine("Could not get the list of installed packages!");
+                App.logger.WriteDebug("Could not get the list of installed packages!");
                 using StreamWriter writer = File.CreateText(filePath);
                 writer.WriteLine("{}");
             }
@@ -44,7 +44,7 @@ namespace WinDurango.UI.Settings
             }
             else
             {
-                Debug.WriteLine($"Couldn't uninstall {pkg.Id.FamilyName} as it was not found in the package list.");
+                App.logger.WriteDebug($"Couldn't uninstall {pkg.Id.FamilyName} as it was not found in the package list.");
                 return;
             }
 
@@ -64,7 +64,7 @@ namespace WinDurango.UI.Settings
 
             if (!File.Exists(filePath))
             {
-                Debug.WriteLine("Could not get the list of installed packages!");
+                App.logger.WriteDebug("Could not get the list of installed packages!");
                 using StreamWriter writer = File.CreateText(filePath);
                 writer.WriteLine("{}");
             }
@@ -140,7 +140,7 @@ namespace WinDurango.UI.Settings
 
             if (!File.Exists(filePath))
             {
-                Debug.WriteLine("Could not get the list of installed packages!");
+                App.logger.WriteDebug("Could not get the list of installed packages!");
                 using StreamWriter writer = File.CreateText(filePath);
                 writer.WriteLine("{}");
             }

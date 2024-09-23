@@ -24,7 +24,7 @@ public class WdSettingsData
 
 public class WdSettings
 {
-    private readonly string _settingsFile = Path.Combine(App.DataDir, "Settings.json");
+    private readonly string _settingsFile = Path.Combine(App.DataDir, "settings.json");
     public WdSettingsData Settings { get; private set; }
 
     public WdSettings()
@@ -46,7 +46,7 @@ public class WdSettings
                     {
                         BackupSettings();
                         GenerateSettings();
-                        Debug.WriteLine($"Settings were reset due to the settings file version being too new. ({loadedSettings.SaveVersion})");
+                        App.logger.WriteInformation($"Settings were reset due to the settings file version being too new. ({loadedSettings.SaveVersion})");
                     }
                     loadedSettings = JsonSerializer.Deserialize<WdSettingsData>(json);
                     Settings = loadedSettings;
@@ -54,23 +54,27 @@ public class WdSettings
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Error loading settings: " + ex.Message);
+                App.logger.WriteError("Error loading settings: " + ex.Message);
                 GenerateSettings();
             }
         }
         else
         {
+            App.logger.WriteWarning($"Settings file doesn't exist");
             GenerateSettings();
         }
     }
 
     private void BackupSettings()
     {
-        File.Move(_settingsFile, _settingsFile + ".old_" + ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeMilliseconds().ToString());
+        string settingsBackup = _settingsFile + ".old_" + ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeMilliseconds().ToString();
+        App.logger.WriteInformation($"Backing up settings.json to {settingsBackup}");
+        File.Move(_settingsFile, settingsBackup);
     }
 
     private async void GenerateSettings()
     {
+        App.logger.WriteInformation($"Generating settings file...");
         Settings = GetDefaults();
         await SaveSettings();
     }
@@ -86,6 +90,7 @@ public class WdSettings
     {
         try
         {
+            App.logger.WriteInformation($"Saving settings...");
             Settings.SaveVersion = App.VerPacked;
             JsonSerializerOptions options = new() { WriteIndented = true };
             string json = JsonSerializer.Serialize(Settings, options);
@@ -94,7 +99,7 @@ public class WdSettings
         }
         catch (Exception ex)
         {
-            Debug.WriteLine("Error saving settings: " + ex.Message);
+            App.logger.WriteError("Error saving settings: " + ex.Message);
         }
     }
 
@@ -111,12 +116,12 @@ public class WdSettings
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error setting {setting}: " + ex.Message);
+                App.logger.WriteWarning($"Error setting {setting}: " + ex.Message);
             }
         }
         else
         {
-            Debug.WriteLine($"Property {setting} does not exist or is read only.");
+            App.logger.WriteError($"Setting {setting} does not exist... this shouldn't happen.");
         }
     }
 }
