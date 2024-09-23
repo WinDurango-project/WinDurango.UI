@@ -51,7 +51,6 @@ public class WdSettings
             catch (Exception ex)
             {
                 Debug.WriteLine("Error loading settings: " + ex.Message);
-                BackupSettings();
                 GenerateSettings();
             }
         }
