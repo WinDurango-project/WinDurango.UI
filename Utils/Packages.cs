@@ -31,10 +31,8 @@ namespace WinDurango.UI.Utils
             DontUse
         };
 
-        public static async Task InstallXPackageAsync(string dir, XvdMode mode = XvdMode.CreateSymlinks)
+        public static async Task InstallXPackageAsync(string dir, XvdMode mode = XvdMode.CreateSymlinks, bool addInstalledPackage = true)
         {
-            App.logger.WriteDebug(dir);
-
             string mountDir = Path.Combine(dir, "Mount");
             string exvdDir = Path.Combine(dir, "EmbeddedXvd");
 
@@ -46,7 +44,11 @@ namespace WinDurango.UI.Utils
                 return;
             }
 
-            string package = await InstallPackageAsync(new Uri(mountDir + "\\AppxManifest.xml", UriKind.Absolute));
+            string package = await InstallPackageAsync(new Uri(mountDir + "\\AppxManifest.xml", UriKind.Absolute), addInstalledPackage);
+
+            if (package == null || !addInstalledPackage)
+                return;
+
             var (familyName, installedPackage) = InstalledPackages.GetInstalledPackage(package).Value;
 
             if (hasExvd)
@@ -111,7 +113,7 @@ namespace WinDurango.UI.Utils
         }
 
 
-        public static async Task<string?> InstallPackageAsync(Uri appxManifestUri)
+        public static async Task<string?> InstallPackageAsync(Uri appxManifestUri, bool addInstalledPackage = true)
         {
             string manifestPath = Uri.UnescapeDataString(appxManifestUri.AbsolutePath);
 
@@ -123,13 +125,13 @@ namespace WinDurango.UI.Utils
             }
 
 
-            App.logger.WriteInformation($"Installing package \"{manifestPath}\"...");
+            Logger.Instance.WriteInformation($"Installing package \"{manifestPath}\"...");
             var status = new ProgressDialog($"Installing package...", "Installing", false);
             _ = App.MainWindow.DispatcherQueue.TryEnqueue(async () => await status.ShowAsync());
             PackageManager pm = new();
             try
             {
-                App.logger.WriteInformation($"Reading manifest...");
+                Logger.Instance.WriteInformation($"Reading manifest...");
                 status.Text = "Reading manifest...";
                 string manifest;
                 await using (var stream = File.OpenRead(manifestPath))
@@ -153,6 +155,7 @@ namespace WinDurango.UI.Utils
                 if (installedPackages.Any())
                 {
                     status.Hide();
+                    Logger.Instance.WriteError($"{pkgName} is already installed.");
                     await new NoticeDialog($"{pkgName} is already installed.", "Error").Show();
                     return null;
                 }
@@ -160,7 +163,7 @@ namespace WinDurango.UI.Utils
 
                 status.Progress = 40.0;
                 status.Text = $"Installing {pkgName}...";
-                App.logger.WriteInformation($"Registering...");
+                Logger.Instance.WriteInformation($"Registering...");
                 var deployment = await pm.RegisterPackageAsync(appxManifestUri, null, DeploymentOptions.DevelopmentMode);
 
                 status.Progress = 60.0;
@@ -168,15 +171,21 @@ namespace WinDurango.UI.Utils
                 status.Text = $"Getting app info...";
                 var recentPkg = GetMostRecentlyInstalledPackage();
 
-                status.Text = $"Updating app list...";
-                status.Progress = 80.0;
-                InstalledPackages.AddInstalledPackage(recentPkg);
-                status.Progress = 90.0;
-                App.MainWindow.ReloadAppList();
-                status.Progress = 100.0;
+                if (addInstalledPackage)
+                {
+                    status.Text = $"Updating app list...";
+                    status.Progress = 80.0;
+                    InstalledPackages.AddInstalledPackage(recentPkg);
+                    status.Progress = 90.0;
+                    App.MainWindow.ReloadAppList();
+                    status.Progress = 100.0;
+                } else
+                {
+                    status.Progress = 100.0;
+                }
 
                 status.Hide();
-                App.logger.WriteInformation($"{recentPkg.Id.Name} was installed.");
+                Logger.Instance.WriteInformation($"{recentPkg.Id.Name} was installed.");
                 await new NoticeDialog($"{recentPkg.Id.Name} was installed! :)").Show();
                 return recentPkg.Id.FamilyName;
             }
@@ -184,8 +193,8 @@ namespace WinDurango.UI.Utils
             {
                 // we're fucked :(
                 status.Hide();
-                App.logger.WriteError($"{appxManifestUri} failed to install");
-                App.logger.WriteException(e);
+                Logger.Instance.WriteError($"{appxManifestUri} failed to install");
+                Logger.Instance.WriteException(e);
                 await new NoticeDialog($"{appxManifestUri} failed to install: {e.Message}", "Error").Show();
                 return null;
             }
@@ -193,7 +202,7 @@ namespace WinDurango.UI.Utils
 
         public static async Task RemovePackage(Package package)
         {
-            App.logger.WriteError($"Uninstalling {package.DisplayName}...");
+            Logger.Instance.WriteError($"Uninstalling {package.DisplayName}...");
             var status = new ProgressDialog($"Uninstalling {package.DisplayName}...", "Uninstalling", false);
             _ = App.MainWindow.DispatcherQueue.TryEnqueue(async () => await status.ShowAsync());
             PackageManager pm = new();
@@ -205,15 +214,15 @@ namespace WinDurango.UI.Utils
                 InstalledPackages.RemoveInstalledPackage(package);
                 status.Progress = 100.0;
                 status.Hide();
-                App.logger.WriteError($"{package.DisplayName} was uninstalled.");
+                Logger.Instance.WriteError($"{package.DisplayName} was uninstalled.");
                 await new NoticeDialog($"{package.DisplayName} was uninstalled.").Show();
                 App.MainWindow.ReloadAppList();
             }
             catch (Exception ex)
             {
                 status.Hide();
-                App.logger.WriteError($"{package.DisplayName} failed to uninstall");
-                App.logger.WriteException(ex);
+                Logger.Instance.WriteError($"{package.DisplayName} failed to uninstall");
+                Logger.Instance.WriteException(ex);
                 await new NoticeDialog($"{package.DisplayName} failed to uninstall: {ex.Message}", "Error!").Show();
             }
             return;

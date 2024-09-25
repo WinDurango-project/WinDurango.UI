@@ -1,0 +1,33 @@
+﻿<ContentDialog
+    x:Class="WinDurango.UI.Dialogs.AppListDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WinDurango.UI.Dialogs"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="TITLE"
+    Style="{ThemeResource DefaultContentDialogStyle}"
+    PrimaryButtonText="Button1"
+    SecondaryButtonText="Button2"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
+	<Grid>
+        <ListView x:Name="appListView" Margin="120,0,0,60">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Height="110" Margin="6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}" Width="110" Height="110">
+                            <Image x:Name="packageLogo" Stretch="UniformToFill" Source="{Binding Logo}"/>
+                        </Border>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,0,0">
+                            <TextBlock x:Name="packageName" Style="{StaticResource TitleTextStyle}" TextWrapping="NoWrap" Text="{Binding Name}"/>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</ContentDialog>

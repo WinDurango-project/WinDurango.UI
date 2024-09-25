@@ -10,14 +10,23 @@
 >
     <controls:DockPanel>
         <controls:WrapPanel controls:DockPanel.Dock="Top" x:Name="appList" HorizontalAlignment="Center" />
-        <Button
+        <SplitButton
             controls:DockPanel.Dock="Bottom"
             HorizontalAlignment="Center" 
             VerticalAlignment="Bottom" 
             Margin="0,0,0,5"
-            Tapped="installButton_Tapped" 
+            Click="installButton_Tapped" 
             x:Name="installButton">
             Install Package
-        </Button>
+            <SplitButton.Flyout>
+                <Flyout Placement="Bottom">
+                    <StackPanel>
+                        <CheckBox Content="Add to App List" Name="addToAppListCheckBox" Unchecked="updateCheckboxes" Checked="updateCheckboxes" IsChecked="True"/>
+                        <CheckBox Content="Auto symlink DLLs" Name="autoSymlinkCheckBox" Unchecked="updateCheckboxes" Checked="updateCheckboxes" IsChecked="True"/>
+                        <Button x:Name="addExistingPackageButton" Click="showAppListView">Add existing package</Button>
+                    </StackPanel>
+                </Flyout>
+            </SplitButton.Flyout>
+        </SplitButton>
     </controls:DockPanel>
 </Page>

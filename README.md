@@ -11,7 +11,9 @@ GUI for WinDurango, which is planned to allow for easy installing/patching among
 
 ## Features
  - [ ] Compiling the DLLs and patching automatically
- - [ ] Allow for package removal from UI instead of just completely uninstalling, as well as allowing for any existing installed package to be added, and other install options... such as installing without symlinking, etc... So we could modify the install button to be a dropdown button with the options inside for the install stuff.
+ - [ ] Allow for package removal from UI instead of just completely uninstalling.
+ - [X] Installation options
+ - [ ] Allow for any existing installed package to be added to the applist
  - [ ] Resize content to fit to screen
  - [ ] Allow for search
 

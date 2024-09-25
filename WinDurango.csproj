@@ -34,6 +34,7 @@
     <None Remove="Controls\AppTile.xaml" />
     <None Remove="Controls\ContributorInfo.xaml" />
     <None Remove="Controls\NewFile1.txt" />
+    <None Remove="Dialogs\AppListDialog.xaml" />
     <None Remove="Pages\AboutPage.xaml" />
     <None Remove="Pages\AppsListPage.xaml" />
     <None Remove="Pages\SettingsPage.xaml" />
@@ -90,5 +91,11 @@
 
   <ItemGroup>
     <None Include="D:\Projects\Dev\C#\WinDurango.UI\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Dialogs\AppListDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 </Project>

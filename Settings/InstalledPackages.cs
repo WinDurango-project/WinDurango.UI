@@ -30,7 +30,7 @@ namespace WinDurango.UI.Settings
 
             if (!File.Exists(filePath))
             {
-                App.logger.WriteDebug("Could not get the list of installed packages!");
+                Logger.Instance.WriteError("Could not get the list of installed packages!");
                 using StreamWriter writer = File.CreateText(filePath);
                 writer.WriteLine("{}");
             }
@@ -44,7 +44,7 @@ namespace WinDurango.UI.Settings
             }
             else
             {
-                App.logger.WriteDebug($"Couldn't uninstall {pkg.Id.FamilyName} as it was not found in the package list.");
+                Logger.Instance.WriteError($"Couldn't uninstall {pkg.Id.FamilyName} as it was not found in the package list.");
                 return;
             }
 
@@ -64,7 +64,7 @@ namespace WinDurango.UI.Settings
 
             if (!File.Exists(filePath))
             {
-                App.logger.WriteDebug("Could not get the list of installed packages!");
+                Logger.Instance.WriteError("Could not get the list of installed packages!");
                 using StreamWriter writer = File.CreateText(filePath);
                 writer.WriteLine("{}");
             }
@@ -125,7 +125,9 @@ namespace WinDurango.UI.Settings
                 return (familyName, installedPkg);
 
             // this should never happen (but in case it does)
-            throw new KeyNotFoundException($"{familyName} was not found in the installed packages list.");
+            var ex = new KeyNotFoundException($"{familyName} was not found in the installed packages list.");
+            Logger.Instance.WriteException(ex);
+            throw ex;
         }
 
         public static void AddInstalledPackage(Package package)
@@ -140,7 +142,7 @@ namespace WinDurango.UI.Settings
 
             if (!File.Exists(filePath))
             {
-                App.logger.WriteDebug("Could not get the list of installed packages!");
+                Logger.Instance.WriteError("Could not get the list of installed packages!");
                 using StreamWriter writer = File.CreateText(filePath);
                 writer.WriteLine("{}");
             }

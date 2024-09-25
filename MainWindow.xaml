@@ -20,10 +20,7 @@
                 <ColumnDefinition Width="0" x:Name="rightPaddingColumn"/>
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="0" Margin="15 0 0 0" Width="32" Height="32">
-                <Image Width="32" Height="32" Source="ms-appx:///Assets/icon.ico"/>
-            </Border>
-            
+            <!-- <Image Grid.Column="0" Width="32" Height="32" Margin="15 0 0 0" Source="ms-appx:///Assets/testimg.png" /> -->
             <TextBlock 
                 Text="WinDurango" 
                 Style="{StaticResource CaptionTextBlockStyle}" 

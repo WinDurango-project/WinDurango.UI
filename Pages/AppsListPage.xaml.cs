@@ -1,9 +1,11 @@
-﻿using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Input;
+﻿using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Security.Principal;
+using Windows.ApplicationModel;
 using Windows.Management.Deployment;
 using Windows.Storage;
 using Windows.Storage.Pickers;
@@ -31,8 +33,28 @@ namespace WinDurango.UI.Pages
                     AppTile gameContainer = new(installedPackage.Key);
                     outerGrid.Children.Add(gameContainer);
                     appList.Children.Add(outerGrid);
+                    Logger.Instance.WriteDebug($"Added {installedPackage.Key} to the app list");
+                } else
+                {
+                    Logger.Instance.WriteError($"Couldn't find package {installedPackage.Value.FullName} in installed UWP packages list");
                 }
             }
+        }
+
+        private /* async */ void showAppListView(object sender, RoutedEventArgs e)
+        {
+            /* AppListDialog dl = new AppListDialog();
+            dl.Title = "Installed UWP apps";
+            dl.XamlRoot = this.Content.XamlRoot;
+            await dl.ShowAsync(); */
+        }
+
+        private void updateCheckboxes(object sender, RoutedEventArgs e)
+        {
+            if (autoSymlinkCheckBox == null || addToAppListCheckBox == null)
+                return;
+
+            autoSymlinkCheckBox.IsEnabled = (bool)addToAppListCheckBox.IsChecked;
         }
 
         public AppsListPage()
@@ -42,7 +64,7 @@ namespace WinDurango.UI.Pages
             InitAppList();
         }
 
-        private async void installButton_Tapped(object sender, TappedRoutedEventArgs e)
+        private async void installButton_Tapped(SplitButton sender, SplitButtonClickEventArgs args)
         {
             var picker = new FolderPicker
             {
@@ -63,7 +85,7 @@ namespace WinDurango.UI.Pages
 
                 if (File.Exists(manifest))
                 {
-                    _ = await Packages.InstallPackageAsync(new Uri(manifest, UriKind.Absolute));
+                    _ = await Packages.InstallPackageAsync(new Uri(manifest, UriKind.Absolute), (bool)addToAppListCheckBox.IsChecked);
                 }
                 else
                 {
@@ -73,10 +95,7 @@ namespace WinDurango.UI.Pages
                         // there IS a mount folder
                         if (File.Exists(Path.Combine(mountFolder + "\\AppxManifest.xml")))
                         {
-                            // there is an AppxManifest inside.
-                            var confirmation = new Confirmation($"There was no AppxManifest found inside the picked folder.\nHowever there was one found inside the Mount folder, would you like to register that?", "Install from Mount?");
-                            if (await confirmation.Show() == Dialog.BtnClicked.Yes)
-                                await Packages.InstallXPackageAsync(folder.Path.ToString());
+                            await Packages.InstallXPackageAsync(folder.Path.ToString(), autoSymlinkCheckBox.IsEnabled && (bool)autoSymlinkCheckBox.IsChecked ? Packages.XvdMode.CreateSymlinks : Packages.XvdMode.DontUse, (bool)addToAppListCheckBox.IsChecked);
                         }
                         else
                         {

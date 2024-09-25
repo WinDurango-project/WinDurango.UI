@@ -7,18 +7,16 @@ namespace WinDurango.UI.Utils
 {
     public class Logger
     {
-        private static readonly string logDir = Path.Combine(App.DataDir, "logs");
+        public static readonly Logger Instance = new Logger();
+        private static readonly string logDir = Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "WinDurango"), "logs");
         private static readonly string logFile = Path.Combine(logDir, $"WinDurangoUI_{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.log");
         private static readonly object @lock = new object();
-        private static readonly Logger instance = new Logger();
 
         static Logger()
         {
             if (!Directory.Exists(logDir))
                 Directory.CreateDirectory(logDir);
         }
-
-        public static Logger Instance => instance;
 
         public void WriteDebug(string str) => WriteLog("DEBUG", str);
         public void WriteError(string str) => WriteLog("ERROR", str);
