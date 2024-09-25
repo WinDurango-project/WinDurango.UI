@@ -10,13 +10,14 @@
 
     <Grid Padding="10 10 10 10">
         <StackPanel Grid.Row="1">
-            <TextBlock Text="Theme"/>
+            <TextBlock Margin="0 5 0 5" Text="Theme"/>
             <DropDownButton 
                 Loaded="OnThemeButtonLoaded"
                 Name="themeButton"
                 Content="Use Mica"
                 HorizontalAlignment="Left" 
-                VerticalAlignment="Top" >
+                VerticalAlignment="Top"
+                Margin="0 5 0 5">
                 <DropDownButton.Flyout>
                     <MenuFlyout Placement="Bottom">
                         <MenuFlyoutItem Text="Mica" Click="OnMicaSelected"/>
@@ -25,6 +26,8 @@
                     </MenuFlyout>
                 </DropDownButton.Flyout>
             </DropDownButton>
+            <TextBlock Margin="0 5 0 5" Text="Other"/>
+            <Button Name="appdataButton" Margin="0 5 0 5" Click="OpenAppData">Open WinDurango AppData folder</Button>
         </StackPanel>
     </Grid>
 </Page>

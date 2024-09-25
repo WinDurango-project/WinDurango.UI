@@ -1,5 +1,6 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using System.Diagnostics;
 using WinDurango.UI.Settings;
 
 namespace WinDurango.UI.Pages
@@ -22,6 +23,11 @@ namespace WinDurango.UI.Pages
         {
             await MainWindow.Settings.SetSetting("Theme", WdSettingsData.ThemeSetting.Fluent);
             OnThemeButtonLoaded(sender, e);
+        }
+
+        private void OpenAppData(object sender, RoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(App.DataDir) { UseShellExecute = true });
         }
 
         private void OnThemeButtonLoaded(object sender, RoutedEventArgs e)
