@@ -4,6 +4,7 @@ using Microsoft.UI.Xaml.Media.Imaging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
@@ -40,6 +41,7 @@ namespace WinDurango.UI.Controls
 
         private void OpenFolder(object sender, RoutedEventArgs e)
         {
+            Logger.Instance.WriteDebug($"Opening app installation folder {_package.InstalledPath}");
             _ = Process.Start(new ProcessStartInfo(_package.InstalledPath) { UseShellExecute = true });
         }
 
@@ -50,11 +52,11 @@ namespace WinDurango.UI.Controls
             this.InitializeComponent();
 
             _package = Packages.GetPackageByFamilyName(_familyName);
-            var ss = Packages.getSplashScreenPath(_package);
+            string ss = Packages.getSplashScreenPath(_package);
             IReadOnlyList<AppListEntry> appListEntries = _package.GetAppListEntries();
             AppListEntry firstAppListEntry = appListEntries[0];
 
-            if (ss == null)
+            if (ss == null || !File.Exists(ss))
             {
                 RandomAccessStreamReference logoStream = firstAppListEntry.DisplayInfo.GetLogo(new Size(320, 180));
                 BitmapImage logoImage = new();
@@ -81,6 +83,7 @@ namespace WinDurango.UI.Controls
 
             startButton.Tapped += async (s, e) =>
             {
+                Logger.Instance.WriteInformation($"Launching {firstAppListEntry.DisplayInfo.DisplayName}");
                 var hasLaunched = await firstAppListEntry.LaunchAsync();
                 if (hasLaunched == false)
                     _ = new NoticeDialog($"Failed to launch \"{_package.DisplayName}\"!");

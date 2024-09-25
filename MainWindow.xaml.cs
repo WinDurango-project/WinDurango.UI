@@ -3,10 +3,12 @@ using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Navigation;
 using System;
 using WinDurango.UI.Dialogs;
 using WinDurango.UI.Pages;
 using WinDurango.UI.Settings;
+using WinDurango.UI.Utils;
 
 namespace WinDurango.UI
 {
@@ -17,6 +19,7 @@ namespace WinDurango.UI
         public AppsListPage AppsListPage;
         public SettingsPage SettingsPage;
         public AboutPage AboutPage;
+
 
         private void NavigationInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
@@ -75,13 +78,20 @@ namespace WinDurango.UI
             }
         }
 
+        private void OnNavigate(object sender, NavigatingCancelEventArgs e)
+        {
+            Logger.Instance.WriteDebug($"Switching to page {e.SourcePageType.Name}");
+        }
+
         public MainWindow()
         {
             this.InitializeComponent();
+            contentFrame.Navigating += OnNavigate;
             Title = AppName;
 
             // setup theme and titlebar
             ExtendsContentIntoTitleBar = true;
+            SetTitleBar(appTitleBar);
             this.Activate();
             LoadSettings();
 

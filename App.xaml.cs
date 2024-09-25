@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using Windows.ApplicationModel;
 using WinDurango.UI.Utils;
 
 namespace WinDurango.UI

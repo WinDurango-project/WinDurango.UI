@@ -120,16 +120,12 @@ namespace WinDurango.UI.Settings
             return true;
         }
 
-        public static (string familyName, InstalledPackage installedPackage)? GetInstalledPackage(string familyName)
+        public static (string? familyName, InstalledPackage? installedPackage)? GetInstalledPackage(string familyName)
         {
             Dictionary<string, InstalledPackage> installedPkgs = GetInstalledPackages();
             if (installedPkgs.TryGetValue(familyName, out InstalledPackage installedPkg))
                 return (familyName, installedPkg);
-
-            // this should never happen (but in case it does)
-            var ex = new KeyNotFoundException($"{familyName} was not found in the installed packages list.");
-            Logger.Instance.WriteException(ex);
-            throw ex;
+            return null;
         }
 
         public static void AddInstalledPackage(Package package)
@@ -154,6 +150,7 @@ namespace WinDurango.UI.Settings
 
             if (installedPkgs.ContainsKey(package.Id.FamilyName))
             {
+                Logger.Instance.WriteError($"Couldn't add {package.DisplayName} as it already exists in the InstalledPackages JSON.");
                 return;
             }
 

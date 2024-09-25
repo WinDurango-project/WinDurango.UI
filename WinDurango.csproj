@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows10.0.22621.0</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.26100.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
     <RootNamespace>WinDurango.UI</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -14,7 +14,7 @@
     <DisableXbfLineInfo>False</DisableXbfLineInfo>
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
     <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
-	<Version>0.0.2</Version>
+	<Version>0.0.3</Version>
 	<AssemblyVersion>$(Version)</AssemblyVersion>
 </PropertyGroup>
 
@@ -30,7 +30,6 @@
     <Compile Remove="Controls\GameContainer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Assets\icon.svg" />
     <None Remove="Controls\AppTile.xaml" />
     <None Remove="Controls\ContributorInfo.xaml" />
     <None Remove="Controls\NewFile1.txt" />

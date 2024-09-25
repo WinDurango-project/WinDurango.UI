@@ -5,13 +5,12 @@
     xmlns:local="using:WinDurango.UI.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:controls="using:CommunityToolkit.WinUI.Controls"
-    mc:Ignorable="d"
->
-    <controls:DockPanel>
-        <controls:WrapPanel controls:DockPanel.Dock="Top" x:Name="appList" HorizontalAlignment="Center" />
+    xmlns:ct="using:CommunityToolkit.WinUI.Controls"
+    mc:Ignorable="d">
+    <ct:DockPanel>
+        <ct:DockPanel ct:DockPanel.Dock="Top" x:Name="appList" HorizontalAlignment="Center" />
         <SplitButton
-            controls:DockPanel.Dock="Bottom"
+            ct:DockPanel.Dock="Bottom"
             HorizontalAlignment="Center" 
             VerticalAlignment="Bottom" 
             Margin="0,0,0,5"
@@ -28,5 +27,5 @@
                 </Flyout>
             </SplitButton.Flyout>
         </SplitButton>
-    </controls:DockPanel>
+    </ct:DockPanel>
 </Page>

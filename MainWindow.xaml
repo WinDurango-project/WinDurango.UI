@@ -6,8 +6,9 @@
     xmlns:local="using:WinDurango.UI"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
-    <Grid>
+    mc:Ignorable="d"
+    >
+    <Grid Padding="0" Margin="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="32"/>
             <RowDefinition/>
@@ -16,17 +17,17 @@
         <Grid Grid.Row="0" Loaded="appTitleBar_Loaded" SizeChanged="appTitleBar_SizeChanged" x:Name="appTitleBar">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="48" x:Name="leftPaddingColumn"/>
-                <ColumnDefinition/>
                 <ColumnDefinition Width="0" x:Name="rightPaddingColumn"/>
             </Grid.ColumnDefinitions>
 
-            <!-- <Image Grid.Column="0" Width="32" Height="32" Margin="15 0 0 0" Source="ms-appx:///Assets/testimg.png" /> -->
-            <TextBlock 
-                Text="WinDurango" 
-                Style="{StaticResource CaptionTextBlockStyle}" 
-                Grid.Column="1" 
-                VerticalAlignment="Center" 
-                Margin="28,0,0,0"/>
+            <Grid x:Name="TitleBar" Grid.Column="1">
+                <Image VerticalAlignment="Center" HorizontalAlignment="Left" Width="16" Height="16" Margin="16 0 0 0" Source="ms-appx:///Assets/icon.png" />
+                <TextBlock 
+                    Text="WinDurango" 
+                    Style="{StaticResource CaptionTextBlockStyle}" 
+                    VerticalAlignment="Center" 
+                    Margin="48,0,0,0"/>
+            </Grid>
         </Grid>
         <NavigationView 
             Grid.Row="1"

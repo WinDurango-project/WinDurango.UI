@@ -3,9 +3,7 @@ using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Security.Principal;
-using Windows.ApplicationModel;
 using Windows.Management.Deployment;
 using Windows.Storage;
 using Windows.Storage.Pickers;
@@ -41,12 +39,12 @@ namespace WinDurango.UI.Pages
             }
         }
 
-        private /* async */ void showAppListView(object sender, RoutedEventArgs e)
+        private async void showAppListView(object sender, RoutedEventArgs e)
         {
-            /* AppListDialog dl = new AppListDialog();
+            AppListDialog dl = new AppListDialog();
             dl.Title = "Installed UWP apps";
             dl.XamlRoot = this.Content.XamlRoot;
-            await dl.ShowAsync(); */
+            await dl.ShowAsync();
         }
 
         private void updateCheckboxes(object sender, RoutedEventArgs e)
