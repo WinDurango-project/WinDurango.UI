@@ -19,14 +19,22 @@ namespace WinDurango.UI.Controls
         private Package _package;
         private readonly string _familyName;
 
-        private async void HandleUnregister(object sender, RoutedEventArgs e)
+        private async void HandleUnregister(object sender, SplitButtonClickEventArgs e)
         {
-            var confirmation = new Confirmation($"Are you sure you want to uninstall {_package.DisplayName}?", "Uninstall?");
-            Dialog.BtnClicked answer = await confirmation.Show();
-            if (answer == Dialog.BtnClicked.Yes)
+            if ((bool)unregisterCheckbox.IsChecked)
+            {
+                var confirmation = new Confirmation($"Are you sure you want to uninstall {_package.DisplayName}?", "Uninstall?");
+                Dialog.BtnClicked answer = await confirmation.Show();
+                if (answer == Dialog.BtnClicked.Yes)
+                {
+                    if (InstalledPackages.RemoveSymlinks(_familyName))
+                        await Packages.RemovePackage(_package);
+                }
+            } else
             {
                 if (InstalledPackages.RemoveSymlinks(_familyName))
-                    await Packages.RemovePackage(_package);
+                    InstalledPackages.RemoveInstalledPackage(_package);
+                App.MainWindow.AppsListPage.InitAppList();
             }
         }
 
@@ -63,16 +71,8 @@ namespace WinDurango.UI.Controls
             infoExpander.Header = _package.DisplayName;
 
             Flyout rcFlyout = new();
-            StackPanel rcOptions = new();
-            Button rcUnregisterButton = new() { Content = "Remove" };
 
-            rcUnregisterButton.Tapped += HandleUnregister;
-
-            rcOptions.Children.Add(rcUnregisterButton);
-            rcFlyout.Content = rcOptions;
-
-            expanderVersion.Text = $"Version {_package.Id.Version.Major}.{_package.Id.Version.Minor}.{_package.Id.Version.Build}";
-
+            expanderVersion.Text = $"Publisher: {_package.PublisherDisplayName}\nVersion {_package.Id.Version.Major}.{_package.Id.Version.Minor}.{_package.Id.Version.Build}";
 
             RightTapped += (sender, e) =>
             {

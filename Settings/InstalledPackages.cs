@@ -50,6 +50,7 @@ namespace WinDurango.UI.Settings
 
             string updated = JsonSerializer.Serialize(installedPkgs, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(filePath, updated);
+            Logger.Instance.WriteInformation($"Removed {pkg.DisplayName} ({pkg.Id.FamilyName}) from the InstalledPackages list.");
         }
 
 
@@ -81,6 +82,7 @@ namespace WinDurango.UI.Settings
         {
             string json = JsonSerializer.Serialize(installedPkgs, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(Path.Combine(App.DataDir, "InstalledPackages.json"), json);
+            Logger.Instance.WriteDebug($"Saved InstalledPackages.json");
         }
 
         public static void UpdateInstalledPackage(string familyName, InstalledPackage installedPkg)
@@ -163,6 +165,7 @@ namespace WinDurango.UI.Settings
 
             string updated = JsonSerializer.Serialize(installedPkgs, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(filePath, updated);
+            Logger.Instance.WriteInformation($"Added {package.DisplayName} ({package.Id.FamilyName}) to the InstalledPackages list.");
         }
     }
 }

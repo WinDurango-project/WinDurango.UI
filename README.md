@@ -11,7 +11,7 @@ GUI for WinDurango, which is planned to allow for easy installing/patching among
 
 ## Features
  - [ ] Compiling the DLLs and patching automatically
- - [ ] Allow for package removal from UI instead of just completely uninstalling.
+ - [X] Allow for package removal from UI instead of just completely uninstalling.
  - [X] Installation options
  - [ ] Allow for any existing installed package to be added to the applist
  - [ ] Resize content to fit to screen
