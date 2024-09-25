@@ -20,10 +20,14 @@ namespace WinDurango.UI
 
         private void NavigationInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
-            if (args.IsSettingsInvoked == true)
+            if (args.IsSettingsInvoked)
             {
-                _ = contentFrame.Navigate(typeof(SettingsPage));
+                if (contentFrame.Content?.GetType() != typeof(SettingsPage))
+                {
+                    _ = contentFrame.Navigate(typeof(SettingsPage));
+                }
             }
+
             else if (args.InvokedItemContainer is NavigationViewItem item)
             {
                 string tag = item.Tag.ToString();
@@ -34,11 +38,14 @@ namespace WinDurango.UI
                     _ => typeof(AppsListPage)
                 };
 
-                if (contentFrame.Navigate(pageType))
+                if (contentFrame.Content?.GetType() != pageType)
                 {
-                    if (contentFrame.Content is AppsListPage appsList)
+                    if (contentFrame.Navigate(pageType))
                     {
-                        AppsListPage = appsList;
+                        if (contentFrame.Content is AppsListPage appsList)
+                        {
+                            AppsListPage = appsList;
+                        }
                     }
                 }
             }

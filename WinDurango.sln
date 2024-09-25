@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35222.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinDurango", "WinDurango.csproj", "{DE60BFCE-2B3A-4007-A111-31ECFAF65037}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM64 = Debug|ARM64
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|ARM64 = Release|ARM64
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DE60BFCE-2B3A-4007-A111-31ECFAF65037}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{DE60BFCE-2B3A-4007-A111-31ECFAF65037}.Debug|ARM64.Build.0 = Debug|ARM64
+		{DE60BFCE-2B3A-4007-A111-31ECFAF65037}.Debug|x64.ActiveCfg = Debug|x64
+		{DE60BFCE-2B3A-4007-A111-31ECFAF65037}.Debug|x64.Build.0 = Debug|x64
+		{DE60BFCE-2B3A-4007-A111-31ECFAF65037}.Debug|x86.ActiveCfg = Debug|x86
+		{DE60BFCE-2B3A-4007-A111-31ECFAF65037}.Debug|x86.Build.0 = Debug|x86
+		{DE60BFCE-2B3A-4007-A111-31ECFAF65037}.Release|ARM64.ActiveCfg = Release|ARM64
+		{DE60BFCE-2B3A-4007-A111-31ECFAF65037}.Release|ARM64.Build.0 = Release|ARM64
+		{DE60BFCE-2B3A-4007-A111-31ECFAF65037}.Release|x64.ActiveCfg = Release|x64
+		{DE60BFCE-2B3A-4007-A111-31ECFAF65037}.Release|x64.Build.0 = Release|x64
+		{DE60BFCE-2B3A-4007-A111-31ECFAF65037}.Release|x86.ActiveCfg = Release|x86
+		{DE60BFCE-2B3A-4007-A111-31ECFAF65037}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {57DF7E05-2CA0-4685-81BA-04E545B1BC12}
+	EndGlobalSection
+EndGlobal
