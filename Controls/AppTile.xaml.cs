@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
@@ -19,19 +20,23 @@ namespace WinDurango.UI.Controls
     {
         private Package _package;
         private readonly string _familyName;
+        private string _Name;
+        private string _Publisher;
+        private string _Version;
 
         private async void HandleUnregister(object sender, SplitButtonClickEventArgs e)
         {
             if ((bool)unregisterCheckbox.IsChecked)
             {
-                var confirmation = new Confirmation($"Are you sure you want to uninstall {_package.DisplayName}?", "Uninstall?");
+                var confirmation = new Confirmation($"Are you sure you want to uninstall {_Name}?", "Uninstall?");
                 Dialog.BtnClicked answer = await confirmation.Show();
                 if (answer == Dialog.BtnClicked.Yes)
                 {
                     if (InstalledPackages.RemoveSymlinks(_familyName))
                         await Packages.RemovePackage(_package);
                 }
-            } else
+            }
+            else
             {
                 if (InstalledPackages.RemoveSymlinks(_familyName))
                     InstalledPackages.RemoveInstalledPackage(_package);
@@ -41,40 +46,59 @@ namespace WinDurango.UI.Controls
 
         private void OpenFolder(object sender, RoutedEventArgs e)
         {
-            Logger.Instance.WriteDebug($"Opening app installation folder {_package.InstalledPath}");
+            Logger.WriteDebug($"Opening app installation folder {_package.InstalledPath}");
             _ = Process.Start(new ProcessStartInfo(_package.InstalledPath) { UseShellExecute = true });
         }
 
         public AppTile(string familyName)
         {
             _familyName = familyName;
-
             this.InitializeComponent();
 
             _package = Packages.GetPackageByFamilyName(_familyName);
+            _Name = _package.DisplayName ?? _package.Id.Name;
+            _Publisher = _package.PublisherDisplayName ?? _package.Id.PublisherId;
+            _Version = $"{_package.Id.Version.Major.ToString() ?? "U"}.{_package.Id.Version.Minor.ToString() ?? "U"}.{_package.Id.Version.Build.ToString() ?? "U"}";
             string ss = Packages.getSplashScreenPath(_package);
             IReadOnlyList<AppListEntry> appListEntries = _package.GetAppListEntries();
-            AppListEntry firstAppListEntry = appListEntries[0];
+            AppListEntry firstAppListEntry = appListEntries.FirstOrDefault();
+
+            if (firstAppListEntry == null)
+                Logger.WriteWarning($"Could not get the applist entry of \"{_Name}\"");
 
             if (ss == null || !File.Exists(ss))
             {
-                RandomAccessStreamReference logoStream = firstAppListEntry.DisplayInfo.GetLogo(new Size(320, 180));
-                BitmapImage logoImage = new();
-
-                using IRandomAccessStream stream = logoStream.OpenReadAsync().GetAwaiter().GetResult();
-                logoImage.SetSource(stream);
-
-                appLogo.Source = logoImage;
+                try
+                {
+                    if (firstAppListEntry != null)
+                    {
+                        RandomAccessStreamReference logoStream = firstAppListEntry.DisplayInfo.GetLogo(new Size(320, 180));
+                        BitmapImage logoImage = new();
+                        using IRandomAccessStream stream = logoStream.OpenReadAsync().GetAwaiter().GetResult();
+                        logoImage.SetSource(stream);
+                        appLogo.Source = logoImage;
+                    }
+                    else
+                    {
+                        BitmapImage logoImage = new(_package.Logo);
+                        appLogo.Source = logoImage;
+                    }
+                }
+                catch (Exception)
+                {
+                    BitmapImage logoImage = new(_package.Logo);
+                    appLogo.Source = logoImage;
+                }
             }
             else
             {
                 appLogo.Source = new BitmapImage(new Uri(ss));
             }
-            infoExpander.Header = _package.DisplayName;
+            infoExpander.Header = _Name;
 
             Flyout rcFlyout = new();
 
-            expanderVersion.Text = $"Publisher: {_package.PublisherDisplayName}\nVersion {_package.Id.Version.Major}.{_package.Id.Version.Minor}.{_package.Id.Version.Build}";
+            expanderVersion.Text = $"Publisher: {_Publisher}\nVersion {_Version}";
 
             RightTapped += (sender, e) =>
             {
@@ -83,10 +107,21 @@ namespace WinDurango.UI.Controls
 
             startButton.Tapped += async (s, e) =>
             {
-                Logger.Instance.WriteInformation($"Launching {firstAppListEntry.DisplayInfo.DisplayName}");
-                var hasLaunched = await firstAppListEntry.LaunchAsync();
-                if (hasLaunched == false)
-                    _ = new NoticeDialog($"Failed to launch \"{_package.DisplayName}\"!");
+                if (_package.Status.LicenseIssue)
+                {
+                    Logger.WriteError($"Could not launch {_Name} due to licensing issue.");
+                    _ = new NoticeDialog($"There is a licensing issue... Do you own this package?", $"Could not launch {_Name}").Show();
+                    return;
+                }
+
+                if (firstAppListEntry == null)
+                {
+                    _ = new NoticeDialog($"Could not get the applist entry of \"{_Name}\"", $"Could not launch {_Name}").Show();
+                    return;
+                }
+                Logger.WriteInformation($"Launching {_Name}");
+                if (await firstAppListEntry.LaunchAsync() == false)
+                    _ = new NoticeDialog($"Failed to launch \"{_Name}\"!", $"Could not launch {_Name}").Show();
             };
         }
     }

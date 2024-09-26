@@ -17,12 +17,12 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Grid Name="expanderButtons" Grid.Row="1">
+            <Grid Name="expanderButtons" Grid.Row="1" Margin="10 0 0 0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <SplitButton x:Name="unregisterButton" Grid.Column="0" Content="Remove" HorizontalAlignment="Center" Click="HandleUnregister">
+                <SplitButton x:Name="unregisterButton" Grid.Column="0" Content="Remove" HorizontalAlignment="Left" Click="HandleUnregister">
                     <SplitButton.Flyout>
                         <Flyout Placement="Bottom">
                             <StackPanel>
@@ -31,7 +31,7 @@
                         </Flyout>
                     </SplitButton.Flyout>
                 </SplitButton>
-                <Button x:Name="viewFolderButton" Grid.Column="1" Content="View Folder" HorizontalAlignment="Center" Click="OpenFolder"/>
+                <Button x:Name="viewFolderButton" Grid.Column="1" Content="View Folder" Margin="10 0 0 0" HorizontalAlignment="Left" Click="OpenFolder"/>
             </Grid>
             <StackPanel Grid.Row="0">
                 <TextBlock x:Name="expanderVersion" Margin="10 0 0 10"/>

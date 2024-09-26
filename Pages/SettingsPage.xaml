@@ -23,6 +23,7 @@
                         <MenuFlyoutItem Text="Mica" Click="OnMicaSelected"/>
                         <MenuFlyoutItem Text="Mica Alt" Click="OnMicaAltSelected"/>
                         <MenuFlyoutItem Text="Fluent" Click="OnFluentSelected"/>
+                        <MenuFlyoutItem Text="System (No Theme)" Click="OnSystemSelected"/>
                     </MenuFlyout>
                 </DropDownButton.Flyout>
             </DropDownButton>

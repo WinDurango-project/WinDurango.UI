@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
-using WinDurango.UI.Dialogs;
 using WinDurango.UI.Utils;
 
 namespace WinDurango.UI.Settings;
@@ -16,7 +14,8 @@ public class WdSettingsData
         Fluent,
         FluentThin,
         Mica,
-        MicaAlt
+        MicaAlt,
+        System
     }
 
     public uint SaveVersion { get; set; } = App.VerPacked;
@@ -47,7 +46,7 @@ public class WdSettings
                     {
                         BackupSettings();
                         GenerateSettings();
-                        Logger.Instance.WriteInformation($"Settings were reset due to the settings file version being too new. ({loadedSettings.SaveVersion})");
+                        Logger.WriteInformation($"Settings were reset due to the settings file version being too new. ({loadedSettings.SaveVersion})");
                     }
                     loadedSettings = JsonSerializer.Deserialize<WdSettingsData>(json);
                     Settings = loadedSettings;
@@ -55,13 +54,13 @@ public class WdSettings
             }
             catch (Exception ex)
             {
-                Logger.Instance.WriteError("Error loading settings: " + ex.Message);
+                Logger.WriteError("Error loading settings: " + ex.Message);
                 GenerateSettings();
             }
         }
         else
         {
-            Logger.Instance.WriteWarning($"Settings file doesn't exist");
+            Logger.WriteWarning($"Settings file doesn't exist");
             GenerateSettings();
         }
     }
@@ -69,18 +68,18 @@ public class WdSettings
     private void BackupSettings()
     {
         string settingsBackup = _settingsFile + ".old_" + ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeMilliseconds().ToString();
-        Logger.Instance.WriteInformation($"Backing up settings.json to {settingsBackup}");
+        Logger.WriteInformation($"Backing up settings.json to {settingsBackup}");
         File.Move(_settingsFile, settingsBackup);
     }
 
     private async void GenerateSettings()
     {
-        Logger.Instance.WriteInformation($"Generating settings file...");
+        Logger.WriteInformation($"Generating settings file...");
         Settings = GetDefaults();
         await SaveSettings();
     }
 
-    private static WdSettingsData GetDefaults() => new WdSettingsData();
+    private static WdSettingsData GetDefaults() => new();
 
     public void MigrateSettings()
     {
@@ -91,7 +90,7 @@ public class WdSettings
     {
         try
         {
-            Logger.Instance.WriteInformation($"Saving settings...");
+            Logger.WriteInformation($"Saving settings...");
             Settings.SaveVersion = App.VerPacked;
             JsonSerializerOptions options = new() { WriteIndented = true };
             string json = JsonSerializer.Serialize(Settings, options);
@@ -100,7 +99,7 @@ public class WdSettings
         }
         catch (Exception ex)
         {
-            Logger.Instance.WriteError("Error saving settings: " + ex.Message);
+            Logger.WriteError("Error saving settings: " + ex.Message);
         }
     }
 
@@ -117,12 +116,12 @@ public class WdSettings
             }
             catch (Exception ex)
             {
-                Logger.Instance.WriteWarning($"Error setting {setting}: " + ex.Message);
+                Logger.WriteWarning($"Error setting {setting}: " + ex.Message);
             }
         }
         else
         {
-            Logger.Instance.WriteError($"Setting {setting} does not exist... this shouldn't happen.");
+            Logger.WriteError($"Setting {setting} does not exist... this shouldn't happen.");
         }
     }
 }

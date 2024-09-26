@@ -13,8 +13,8 @@
     <XamlDebuggingInformation>True</XamlDebuggingInformation>
     <DisableXbfLineInfo>False</DisableXbfLineInfo>
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
-    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
-	<Version>0.0.3</Version>
+	<SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+	<Version>0.0.4</Version>
 	<AssemblyVersion>$(Version)</AssemblyVersion>
 </PropertyGroup>
 
@@ -39,12 +39,16 @@
     <None Remove="Pages\SettingsPage.xaml" />
   </ItemGroup>
 
+	<PropertyGroup>
+		<WindowsSdkPackageVersion>10.0.26100.38</WindowsSdkPackageVersion>
+	</PropertyGroup>
+	
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Uwp.Controls.Primitives" Version="8.1.240821" />
     <PackageReference Include="DotNetProjects.SVGImage" Version="5.2.1" />
-    <PackageReference Include="Microsoft.UI.Xaml" Version="2.8.6" />
-    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.756" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240802000" />
+	<PackageReference Include="Microsoft.UI.Xaml" Version="2.8.6" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.240829007" />
     <PackageReference Include="System.DirectoryServices" Version="8.0.0" />
     <PackageReference Include="System.DirectoryServices.AccountManagement" Version="8.0.0" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.8" />

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using Windows.ApplicationModel;
@@ -30,7 +29,7 @@ namespace WinDurango.UI.Settings
 
             if (!File.Exists(filePath))
             {
-                Logger.Instance.WriteError("Could not get the list of installed packages!");
+                Logger.WriteError("Could not get the list of installed packages!");
                 using StreamWriter writer = File.CreateText(filePath);
                 writer.WriteLine("{}");
             }
@@ -44,13 +43,13 @@ namespace WinDurango.UI.Settings
             }
             else
             {
-                Logger.Instance.WriteError($"Couldn't uninstall {pkg.Id.FamilyName} as it was not found in the package list.");
+                Logger.WriteError($"Couldn't uninstall {pkg.Id.FamilyName} as it was not found in the package list.");
                 return;
             }
 
             string updated = JsonSerializer.Serialize(installedPkgs, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(filePath, updated);
-            Logger.Instance.WriteInformation($"Removed {pkg.DisplayName} ({pkg.Id.FamilyName}) from the InstalledPackages list.");
+            Logger.WriteInformation($"Removed {pkg.DisplayName} ({pkg.Id.FamilyName}) from the InstalledPackages list.");
         }
 
 
@@ -65,7 +64,7 @@ namespace WinDurango.UI.Settings
 
             if (!File.Exists(filePath))
             {
-                Logger.Instance.WriteError("Could not get the list of installed packages!");
+                Logger.WriteError("Could not get the list of installed packages!");
                 using StreamWriter writer = File.CreateText(filePath);
                 writer.WriteLine("{}");
             }
@@ -82,7 +81,7 @@ namespace WinDurango.UI.Settings
         {
             string json = JsonSerializer.Serialize(installedPkgs, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(Path.Combine(App.DataDir, "InstalledPackages.json"), json);
-            Logger.Instance.WriteDebug($"Saved InstalledPackages.json");
+            Logger.WriteDebug($"Saved InstalledPackages.json");
         }
 
         public static void UpdateInstalledPackage(string familyName, InstalledPackage installedPkg)
@@ -120,12 +119,10 @@ namespace WinDurango.UI.Settings
             return true;
         }
 
-        public static (string? familyName, InstalledPackage? installedPackage)? GetInstalledPackage(string familyName)
+        public static (string familyName, InstalledPackage installedPackage)? GetInstalledPackage(string familyName)
         {
             Dictionary<string, InstalledPackage> installedPkgs = GetInstalledPackages();
-            if (installedPkgs.TryGetValue(familyName, out InstalledPackage installedPkg))
-                return (familyName, installedPkg);
-            return null;
+            return installedPkgs.TryGetValue(familyName, out InstalledPackage installedPkg) ? (familyName, installedPkg) : null;
         }
 
         public static void AddInstalledPackage(Package package)
@@ -140,7 +137,7 @@ namespace WinDurango.UI.Settings
 
             if (!File.Exists(filePath))
             {
-                Logger.Instance.WriteError("Could not get the list of installed packages!");
+                Logger.WriteError("Could not get the list of installed packages!");
                 using StreamWriter writer = File.CreateText(filePath);
                 writer.WriteLine("{}");
             }
@@ -150,7 +147,7 @@ namespace WinDurango.UI.Settings
 
             if (installedPkgs.ContainsKey(package.Id.FamilyName))
             {
-                Logger.Instance.WriteError($"Couldn't add {package.DisplayName} as it already exists in the InstalledPackages JSON.");
+                Logger.WriteError($"Couldn't add {package.DisplayName} as it already exists in the InstalledPackages JSON.");
                 return;
             }
 
@@ -162,7 +159,7 @@ namespace WinDurango.UI.Settings
 
             string updated = JsonSerializer.Serialize(installedPkgs, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(filePath, updated);
-            Logger.Instance.WriteInformation($"Added {package.DisplayName} ({package.Id.FamilyName}) to the InstalledPackages list.");
+            Logger.WriteInformation($"Added {package.DisplayName} ({package.Id.FamilyName}) to the InstalledPackages list.");
         }
     }
 }

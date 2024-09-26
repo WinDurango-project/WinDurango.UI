@@ -2,7 +2,7 @@
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media.Imaging;
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using Windows.ApplicationModel;
 using WinDurango.UI.Settings;
 using WinDurango.UI.Utils;
@@ -12,18 +12,20 @@ namespace WinDurango.UI.Dialogs
 {
     public sealed partial class AppListDialog : ContentDialog
     {
-        public ObservableCollection<Package> Pkgs { get; set; } = new ObservableCollection<Package>();
+        public List<Package> Pkgs { get; set; } = new List<Package>();
 
-        public AppListDialog()
+        public AppListDialog(List<Package> packages, bool multiSelect = false)
         {
-            Logger.Instance.WriteWarning($"AppList is very buggy atm, expect a crash.");
-            App.MainWindow.DispatcherQueue.TryEnqueue(() =>
-            {
-                Pkgs = new ObservableCollection<Package>(Packages.GetInstalledPackages());
-                this.DataContext = this;
-            });
+            Logger.WriteWarning($"AppList is very buggy atm, expect a crash.");
+
+            this.Pkgs = packages;
+
+            this.DataContext = this;
 
             this.InitializeComponent();
+
+            if (multiSelect)
+                appListView.SelectionMode = ListViewSelectionMode.Multiple;
             appListView.MaxHeight = App.MainWindow.Bounds.Height * 0.65;
 
         }
@@ -33,17 +35,15 @@ namespace WinDurango.UI.Dialogs
         {
             var image = sender as Image;
             image.Source = new BitmapImage(new Uri("ms-appx:///Assets/testimg.png"));
-            Logger.Instance.WriteWarning($"Failed to load logo.");
+            Logger.WriteWarning($"Failed to load logo.");
         }
 
         private void AddToAppList(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            if (appListView.SelectedItem is Package package)
+            foreach (Package package in appListView.SelectedItems)
             {
                 if (InstalledPackages.GetInstalledPackage(package.Id.FamilyName) == null)
                     InstalledPackages.AddInstalledPackage(package);
-                else
-                    new NoticeDialog($"{package.DisplayName} already exists.", "Couldn't add app");
                 App.MainWindow.AppsListPage.InitAppList();
             }
         }

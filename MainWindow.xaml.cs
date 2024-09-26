@@ -61,6 +61,7 @@ namespace WinDurango.UI
 
         public void LoadSettings()
         {
+            ExtendsContentIntoTitleBar = Settings.Settings.Theme != WdSettingsData.ThemeSetting.System;
             switch (Settings.Settings.Theme)
             {
                 case WdSettingsData.ThemeSetting.Mica:
@@ -75,25 +76,26 @@ namespace WinDurango.UI
                 case WdSettingsData.ThemeSetting.FluentThin:
                     this.SystemBackdrop = new DesktopAcrylicBackdrop();
                     break;
+                case WdSettingsData.ThemeSetting.System:
+                    this.SystemBackdrop = null;
+                    break;
             }
         }
 
         private void OnNavigate(object sender, NavigatingCancelEventArgs e)
         {
-            Logger.Instance.WriteDebug($"Switching to page {e.SourcePageType.Name}");
+            Logger.WriteDebug($"Switching to page {e.SourcePageType.Name}");
         }
 
         public MainWindow()
         {
-            this.InitializeComponent();
-            contentFrame.Navigating += OnNavigate;
             Title = AppName;
-
-            // setup theme and titlebar
-            ExtendsContentIntoTitleBar = true;
-            SetTitleBar(appTitleBar);
+            AppWindow.SetIcon("ms-appx:///Assets/icon.ico");
             this.Activate();
             LoadSettings();
+
+            this.InitializeComponent();
+            contentFrame.Navigating += OnNavigate;
 
             contentFrame.Navigate(typeof(AppsListPage));
             AppsListPage = (AppsListPage)contentFrame.Content;

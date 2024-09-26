@@ -3,7 +3,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using Windows.ApplicationModel;
 using WinDurango.UI.Utils;
 
 namespace WinDurango.UI
@@ -38,7 +37,7 @@ namespace WinDurango.UI
 
         protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
-            Logger.Instance.WriteDebug("Showing MainWindow");
+            Logger.WriteDebug("Showing MainWindow");
             MainWindow.Activate();
         }
     }

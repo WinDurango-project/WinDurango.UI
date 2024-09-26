@@ -6,26 +6,30 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ct="using:CommunityToolkit.WinUI.Controls"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    >
     <ct:DockPanel>
-        <ct:DockPanel ct:DockPanel.Dock="Top" x:Name="appList" HorizontalAlignment="Center" />
-        <SplitButton
-            ct:DockPanel.Dock="Bottom"
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Bottom" 
-            Margin="0,0,0,5"
-            Click="installButton_Tapped" 
+        <StackPanel ct:DockPanel.Dock="Bottom" Name="controlList">
+            <SplitButton
+            HorizontalAlignment="Center"
+            Margin="0,10,0,10"
+            Click="InstallButton_Tapped" 
             x:Name="installButton">
             Install Package
             <SplitButton.Flyout>
-                <Flyout Placement="Bottom">
+                <Flyout Placement="Top">
                     <StackPanel>
-                        <CheckBox Content="Add to App List" Name="addToAppListCheckBox" Unchecked="updateCheckboxes" Checked="updateCheckboxes" IsChecked="True"/>
-                        <CheckBox Content="Auto symlink DLLs" Name="autoSymlinkCheckBox" Unchecked="updateCheckboxes" Checked="updateCheckboxes" IsChecked="True"/>
-                        <Button x:Name="addExistingPackageButton" Click="showAppListView">Add existing package</Button>
+                        <CheckBox Content="Add to App List" Name="addToAppListCheckBox" Unchecked="UpdateCheckboxes" Checked="UpdateCheckboxes" IsChecked="True"/>
+                        <CheckBox Content="Auto symlink DLLs" Name="autoSymlinkCheckBox" Unchecked="UpdateCheckboxes" Checked="UpdateCheckboxes" IsChecked="True"/>
+                            <Button x:Name="eraScan" Margin="0 10 0 10" Click="ShowInstalledEraApps">Scan for installed Era/XbUWP apps</Button>
+                            <Button x:Name="addExistingPackageButton" Click="ShowAppListView">Add existing package</Button>
                     </StackPanel>
                 </Flyout>
             </SplitButton.Flyout>
         </SplitButton>
+        </StackPanel>
+        <ScrollViewer ct:DockPanel.Dock="Top" >
+            <ct:WrapPanel x:Name="appList" HorizontalAlignment="Center" />
+        </ScrollViewer>
     </ct:DockPanel>
 </Page>

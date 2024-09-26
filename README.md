@@ -13,7 +13,7 @@ GUI for WinDurango, which is planned to allow for easy installing/patching among
  - [ ] Compiling the DLLs and patching automatically
  - [X] Allow for package removal from UI instead of just completely uninstalling.
  - [X] Installation options
- - [ ] Scan for already installed EraOS stuff
+ - [X] Scan for already installed EraOS/XUWP stuff
  - [ ] Allow for any existing installed package to be added to the applist
  - [ ] Resize content to fit to screen
  - [ ] Allow for search

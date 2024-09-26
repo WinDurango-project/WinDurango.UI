@@ -3,6 +3,7 @@ using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Security.Principal;
 using Windows.Management.Deployment;
 using Windows.Storage;
@@ -31,23 +32,32 @@ namespace WinDurango.UI.Pages
                     AppTile gameContainer = new(installedPackage.Key);
                     outerGrid.Children.Add(gameContainer);
                     appList.Children.Add(outerGrid);
-                    Logger.Instance.WriteDebug($"Added {installedPackage.Key} to the app list");
-                } else
+                    Logger.WriteDebug($"Added {installedPackage.Key} to the app list");
+                }
+                else
                 {
-                    Logger.Instance.WriteError($"Couldn't find package {installedPackage.Value.FullName} in installed UWP packages list");
+                    Logger.WriteError($"Couldn't find package {installedPackage.Value.FullName} in installed UWP packages list");
                 }
             }
         }
 
-        private async void showAppListView(object sender, RoutedEventArgs e)
+        private async void ShowAppListView(object sender, RoutedEventArgs e)
         {
-            AppListDialog dl = new AppListDialog();
+            AppListDialog dl = new(Packages.GetInstalledPackages().ToList());
             dl.Title = "Installed UWP apps";
             dl.XamlRoot = this.Content.XamlRoot;
             await dl.ShowAsync();
         }
 
-        private void updateCheckboxes(object sender, RoutedEventArgs e)
+        private async void ShowInstalledEraApps(object sender, RoutedEventArgs e)
+        {
+            AppListDialog dl = new(XHandler.getXPackages(Packages.GetInstalledPackages().ToList()), true);
+            dl.Title = "Installed Era/XUWP apps";
+            dl.XamlRoot = this.Content.XamlRoot;
+            await dl.ShowAsync();
+        }
+
+        private void UpdateCheckboxes(object sender, RoutedEventArgs e)
         {
             if (autoSymlinkCheckBox == null || addToAppListCheckBox == null)
                 return;
@@ -62,7 +72,7 @@ namespace WinDurango.UI.Pages
             InitAppList();
         }
 
-        private async void installButton_Tapped(SplitButton sender, SplitButtonClickEventArgs args)
+        private async void InstallButton_Tapped(SplitButton sender, SplitButtonClickEventArgs args)
         {
             var picker = new FolderPicker
             {
@@ -98,11 +108,13 @@ namespace WinDurango.UI.Pages
                         else
                         {
                             // there is no AppxManifest inside.
+                            Logger.WriteError($"Could not find AppxManifest.xml in {folder.Path} and {mountFolder}");
                             await new NoticeDialog($"AppxManifest does not exist in both {folder.Path} and {mountFolder}", "Error").Show();
                         }
                     }
                     else
                     {
+                        Logger.WriteError($"Could not find AppxManifest.xml in {folder.Path} and no Mount folder exists");
                         await new NoticeDialog($"AppxManifest does not exist in {folder.Path} and there is no \"Mount\" folder.", "Error").Show();
                     }
 
