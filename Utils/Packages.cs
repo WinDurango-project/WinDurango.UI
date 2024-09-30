@@ -249,7 +249,7 @@ namespace WinDurango.UI.Utils
                 status.Hide();
                 Logger.WriteError($"{package.DisplayName} failed to uninstall");
                 Logger.WriteException(ex);
-                await new NoticeDialog(GetLocalizedText("PackageUninstallFailedEx", package.DisplayName, e.Message), "Error!").Show();
+                await new NoticeDialog(GetLocalizedText("PackageUninstallFailedEx", package.DisplayName, ex.Message), "Error!").Show();
             }
             return;
         }

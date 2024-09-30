@@ -101,7 +101,9 @@
 </ItemGroup>
 
 <ItemGroup>
+  <Content Remove="Strings\en-US\Controls.resw" />
   <Content Remove="Strings\en-US\Errors.resw" />
+  <Content Remove="Strings\en-US\Resources.resw" />
 </ItemGroup>
 
   <ItemGroup>
