@@ -40,8 +40,16 @@ namespace WinDurango.UI.Utils
                 throw e;
         }
 
+        public static void WriteException(string str)
+        {
+            Instance.WriteLog(LogLevel.Exception, str);
+        }
+
         private void WriteLog(LogLevel level, string message)
         {
+            if (level == LogLevel.Debug && !App.Settings.Settings.DebugLoggingEnabled && !Debugger.IsAttached)
+                return;
+
             string logEntry = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] [{level.ToString().ToUpper()}] {message}";
             Debug.WriteLine(logEntry);
 

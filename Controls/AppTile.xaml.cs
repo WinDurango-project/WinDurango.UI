@@ -23,6 +23,7 @@ namespace WinDurango.UI.Controls
         private string _Name;
         private string _Publisher;
         private string _Version;
+        private Uri _Logo;
 
         private async void HandleUnregister(object sender, SplitButtonClickEventArgs e)
         {
@@ -56,12 +57,27 @@ namespace WinDurango.UI.Controls
             this.InitializeComponent();
 
             _package = Packages.GetPackageByFamilyName(_familyName);
-            _Name = _package.DisplayName ?? _package.Id.Name;
+            try
+            {
+                _Name = _package.DisplayName ?? _package.Id.Name;
+            }
+            catch
+            {
+                _Name = _package.Id.Name;
+            }
             _Publisher = _package.PublisherDisplayName ?? _package.Id.PublisherId;
-            _Version = $"{_package.Id.Version.Major.ToString() ?? "U"}.{_package.Id.Version.Minor.ToString() ?? "U"}.{_package.Id.Version.Build.ToString() ?? "U"}";
-            string ss = Packages.getSplashScreenPath(_package);
-            IReadOnlyList<AppListEntry> appListEntries = _package.GetAppListEntries();
-            AppListEntry firstAppListEntry = appListEntries.FirstOrDefault();
+            _Version = $"{_package.Id.Version.Major.ToString() ?? "U"}.{_package.Id.Version.Minor.ToString() ?? "U"}.{_package.Id.Version.Build.ToString() ?? "U"}.{_package.Id.Version.Revision.ToString() ?? "U"}";
+            _Logo = _package.Logo;
+            string ss = Packages.GetSplashScreenPath(_package);
+            IReadOnlyList<AppListEntry> appListEntries = null;
+            try
+            {
+                appListEntries = _package.GetAppListEntries();
+            } catch
+            {
+                Logger.WriteWarning($"Could not get the applist entries of \"{_Name}\"");
+            }
+            AppListEntry firstAppListEntry = appListEntries?.FirstOrDefault() ?? null;
 
             if (firstAppListEntry == null)
                 Logger.WriteWarning($"Could not get the applist entry of \"{_Name}\"");
@@ -80,13 +96,13 @@ namespace WinDurango.UI.Controls
                     }
                     else
                     {
-                        BitmapImage logoImage = new(_package.Logo);
+                        BitmapImage logoImage = new(_Logo);
                         appLogo.Source = logoImage;
                     }
                 }
                 catch (Exception)
                 {
-                    BitmapImage logoImage = new(_package.Logo);
+                    BitmapImage logoImage = new(_Logo);
                     appLogo.Source = logoImage;
                 }
             }

@@ -14,15 +14,16 @@ GUI for WinDurango, which is planned to allow for easy installing/patching among
  - [X] Allow for package removal from UI instead of just completely uninstalling.
  - [X] Installation options
  - [X] Scan for already installed EraOS/XUWP stuff
- - [ ] Allow for any existing installed package to be added to the applist
+ - [X] Allow for any existing installed package to be added to the applist
  - [ ] Resize content to fit to screen
  - [ ] Allow for search
 
 ## Bugs/Improvements
  - [X] Make the applist not go offscreen (lol)
  - [ ] Once we have enough settings in place, make it have pages using a horizontal NavigationView (probably)
- - [ ] Applist pages
- - [ ] Fix icon in the titlebar
+ - [ ] Fix UI load speed when loading a lot of packages on startup
+ - [X] Applist scrolling
+ - [X] Fix icon in the titlebar
  - [ ] Repo contributors on the about screen
  - [ ] Get Fluent Thin working
  - [ ] Add versioning to the InstalledPackages json (as in versioning the JSON file itself)

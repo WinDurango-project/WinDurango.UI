@@ -1,0 +1,22 @@
+﻿<ContentDialog
+    x:Class="WinDurango.UI.Dialogs.InstallConfirmationDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WinDurango.UI.Dialogs"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Confirm install"
+    Style="{ThemeResource DefaultContentDialogStyle}"
+    PrimaryButtonText="Install"
+    SecondaryButtonText="Cancel">
+	<Grid>
+        <StackPanel Orientation="Horizontal">
+            <Image Name="packageLogo" MaxHeight="128" MaxWidth="128"></Image>
+            <StackPanel Margin="10 0 0 0" Orientation="Vertical">
+                <TextBlock Name="packageName" FontWeight="Bold" FontSize="18" TextWrapping="Wrap" MaxWidth="400"></TextBlock>
+                <TextBlock Name="packagePublisher" TextWrapping="Wrap" MaxWidth="400"></TextBlock>
+                <TextBlock Name="packageVersion" TextWrapping="Wrap" MaxWidth="400"></TextBlock>
+                <TextBlock Name="packageLocation" TextWrapping="Wrap" MaxWidth="400"></TextBlock>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</ContentDialog>

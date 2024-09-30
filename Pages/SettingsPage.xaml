@@ -5,8 +5,7 @@
     xmlns:local="using:WinDurango.UI.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    mc:Ignorable="d">
 
     <Grid Padding="10 10 10 10">
         <StackPanel Grid.Row="1">
@@ -28,6 +27,7 @@
                 </DropDownButton.Flyout>
             </DropDownButton>
             <TextBlock Margin="0 5 0 5" Text="Other"/>
+            <ToggleSwitch OnContent="Enable debug logging" OffContent="Enable debug logging"  Toggled="OnDebugLogToggled" Name="DebugLogToggle" Loaded="OnDebugLogToggleLoaded"/>
             <Button Name="appdataButton" Margin="0 5 0 5" Click="OpenAppData">Open WinDurango AppData folder</Button>
         </StackPanel>
     </Grid>

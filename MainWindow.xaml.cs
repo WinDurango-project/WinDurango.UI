@@ -15,7 +15,7 @@ namespace WinDurango.UI
     public sealed partial class MainWindow : Window
     {
         public readonly string AppName = "WinDurango";
-        public static readonly WdSettings Settings = new();
+        public static readonly WdSettings Settings = App.Settings;
         public AppsListPage AppsListPage;
         public SettingsPage SettingsPage;
         public AboutPage AboutPage;
@@ -89,6 +89,7 @@ namespace WinDurango.UI
 
         public MainWindow()
         {
+            Closed += App.OnClosed;
             Title = AppName;
             AppWindow.SetIcon("ms-appx:///Assets/icon.ico");
             this.Activate();

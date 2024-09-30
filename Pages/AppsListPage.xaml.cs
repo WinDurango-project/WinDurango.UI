@@ -1,10 +1,14 @@
-﻿using Microsoft.UI.Xaml;
+﻿using CommunityToolkit.WinUI;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Security.Principal;
+using System.Threading.Tasks;
 using Windows.Management.Deployment;
 using Windows.Storage;
 using Windows.Storage.Pickers;
@@ -12,6 +16,7 @@ using WinDurango.UI.Controls;
 using WinDurango.UI.Dialogs;
 using WinDurango.UI.Settings;
 using WinDurango.UI.Utils;
+using static WinDurango.UI.Localization.Locale;
 
 namespace WinDurango.UI.Pages
 {
@@ -43,7 +48,7 @@ namespace WinDurango.UI.Pages
 
         private async void ShowAppListView(object sender, RoutedEventArgs e)
         {
-            AppListDialog dl = new(Packages.GetInstalledPackages().ToList());
+            AppListDialog dl = new(Packages.GetInstalledPackages().ToList(), true);
             dl.Title = "Installed UWP apps";
             dl.XamlRoot = this.Content.XamlRoot;
             await dl.ShowAsync();
@@ -51,7 +56,7 @@ namespace WinDurango.UI.Pages
 
         private async void ShowInstalledEraApps(object sender, RoutedEventArgs e)
         {
-            AppListDialog dl = new(XHandler.getXPackages(Packages.GetInstalledPackages().ToList()), true);
+            AppListDialog dl = new(XHandler.GetXPackages(Packages.GetInstalledPackages().ToList()), true);
             dl.Title = "Installed Era/XUWP apps";
             dl.XamlRoot = this.Content.XamlRoot;
             await dl.ShowAsync();
@@ -69,7 +74,15 @@ namespace WinDurango.UI.Pages
         {
             InitializeComponent();
 
+            Stopwatch PlatinumWatch = new Stopwatch();
+
+            Logger.WriteDebug("Initializing AppsListPage...");
+
+            PlatinumWatch.Start();
             InitAppList();
+            PlatinumWatch.Stop();
+
+            Logger.WriteDebug("Initialized AppsListPage in {0:D2}:{1:D2}:{2:D2}.{3:D3}", (int)PlatinumWatch.Elapsed.TotalHours, (int)PlatinumWatch.Elapsed.TotalMinutes, (int)PlatinumWatch.Elapsed.TotalSeconds, (int)PlatinumWatch.Elapsed.TotalMilliseconds);
         }
 
         private async void InstallButton_Tapped(SplitButton sender, SplitButtonClickEventArgs args)
@@ -93,7 +106,12 @@ namespace WinDurango.UI.Pages
 
                 if (File.Exists(manifest))
                 {
-                    _ = await Packages.InstallPackageAsync(new Uri(manifest, UriKind.Absolute), (bool)addToAppListCheckBox.IsChecked);
+                    var dialog = new InstallConfirmationDialog(manifest);
+                    dialog.PrimaryButtonClick += async (sender, e) =>
+                    {
+                        _ = await Packages.InstallPackageAsync(new Uri(manifest, UriKind.Absolute), (bool)addToAppListCheckBox.IsChecked);
+                    };
+                    await dialog.ShowAsync();
                 }
                 else
                 {
@@ -103,19 +121,24 @@ namespace WinDurango.UI.Pages
                         // there IS a mount folder
                         if (File.Exists(Path.Combine(mountFolder + "\\AppxManifest.xml")))
                         {
-                            await Packages.InstallXPackageAsync(folder.Path.ToString(), autoSymlinkCheckBox.IsEnabled && (bool)autoSymlinkCheckBox.IsChecked ? Packages.XvdMode.CreateSymlinks : Packages.XvdMode.DontUse, (bool)addToAppListCheckBox.IsChecked);
+                            var dialog = new InstallConfirmationDialog(Path.Combine(mountFolder + "\\AppxManifest.xml"));
+                            dialog.PrimaryButtonClick += async (sender, e) =>
+                            {
+                                await Packages.InstallXPackageAsync(folder.Path.ToString(), autoSymlinkCheckBox.IsEnabled && (bool)autoSymlinkCheckBox.IsChecked ? Packages.XvdMode.CreateSymlinks : Packages.XvdMode.DontUse, (bool)addToAppListCheckBox.IsChecked);
+                            };
+                            await dialog.ShowAsync();
                         }
                         else
                         {
                             // there is no AppxManifest inside.
                             Logger.WriteError($"Could not find AppxManifest.xml in {folder.Path} and {mountFolder}");
-                            await new NoticeDialog($"AppxManifest does not exist in both {folder.Path} and {mountFolder}", "Error").Show();
+                            await new NoticeDialog(GetLocalizedText("ManifestNotFoundMulti", folder.Path, mountFolder), "Error").Show();
                         }
                     }
                     else
                     {
                         Logger.WriteError($"Could not find AppxManifest.xml in {folder.Path} and no Mount folder exists");
-                        await new NoticeDialog($"AppxManifest does not exist in {folder.Path} and there is no \"Mount\" folder.", "Error").Show();
+                        await new NoticeDialog(GetLocalizedText("ManifestNotFoundNoMount", folder.Path), "Error").Show();
                     }
 
                     return;

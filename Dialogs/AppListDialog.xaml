@@ -9,23 +9,7 @@
     SecondaryButtonText="Cancel"
     SecondaryButtonClick="hideDialog">
     <Grid>
-        <ListView Name="appListView" ItemsSource="{x:Bind Pkgs}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <!-- This ups the crash chance by a whole lot.
-                        <Image Width="64" Height="64" Margin="5" ImageFailed="logoFailed">
-                            <Image.Source>
-                                <BitmapImage UriSource="{Binding Logo, TargetNullValue='ms-appx:///Assets/testimg.png', FallbackValue='ms-appx:///Assets/testimg.png'}"  />
-                            </Image.Source>
-                        </Image> -->
-                        <StackPanel Orientation="Vertical" Margin="5">
-                            <TextBlock Text="{Binding DisplayName, TargetNullValue='Unknown', FallbackValue='Unknown'}" FontWeight="Bold" />
-                            <TextBlock Text="{Binding PublisherDisplayName, TargetNullValue='Unknown', FallbackValue='Unknown'}" />
-                        </StackPanel>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
+        <ListView x:Name="appListView" Loaded="AppListView_Loaded">
         </ListView>
     </Grid>
 </ContentDialog>

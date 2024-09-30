@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
+using WinDurango.UI.Dialogs;
 using WinDurango.UI.Utils;
 
 namespace WinDurango.UI.Settings;
@@ -20,6 +21,7 @@ public class WdSettingsData
 
     public uint SaveVersion { get; set; } = App.VerPacked;
     public ThemeSetting Theme { get; set; } = ThemeSetting.Fluent;
+    public bool DebugLoggingEnabled { get; set; } = false;
 }
 
 public class WdSettings
@@ -44,8 +46,7 @@ public class WdSettings
                 {
                     if (loadedSettings.SaveVersion > App.VerPacked)
                     {
-                        BackupSettings();
-                        GenerateSettings();
+                        ResetSettings();
                         Logger.WriteInformation($"Settings were reset due to the settings file version being too new. ({loadedSettings.SaveVersion})");
                     }
                     loadedSettings = JsonSerializer.Deserialize<WdSettingsData>(json);
@@ -63,6 +64,13 @@ public class WdSettings
             Logger.WriteWarning($"Settings file doesn't exist");
             GenerateSettings();
         }
+    }
+
+    private void ResetSettings()
+    {
+        BackupSettings();
+        GenerateSettings();
+        Logger.WriteInformation($"Settings have been reset");
     }
 
     private void BackupSettings()

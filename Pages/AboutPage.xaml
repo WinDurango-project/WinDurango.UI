@@ -6,8 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:appLocal="using:WinDurango.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:controls="using:WinDurango.UI.Controls" xmlns:svg="using:SVGImage.SVG"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    mc:Ignorable="d">
 
     <StackPanel Orientation="Vertical" Padding="10">
         <TextBlock Text="Application Info" FontSize="24"/>

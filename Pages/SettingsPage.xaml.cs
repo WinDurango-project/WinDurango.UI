@@ -1,6 +1,7 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System.Diagnostics;
+using System.Windows.Controls.Primitives;
 using WinDurango.UI.Settings;
 
 namespace WinDurango.UI.Pages
@@ -10,26 +11,31 @@ namespace WinDurango.UI.Pages
         // should probably merge these into one?
         private async void OnMicaSelected(object sender, RoutedEventArgs e)
         {
-            await MainWindow.Settings.SetSetting("Theme", WdSettingsData.ThemeSetting.Mica);
+            await App.Settings.SetSetting("Theme", WdSettingsData.ThemeSetting.Mica);
             OnThemeButtonLoaded(sender, e);
         }
 
         private async void OnMicaAltSelected(object sender, RoutedEventArgs e)
         {
-            await MainWindow.Settings.SetSetting("Theme", WdSettingsData.ThemeSetting.MicaAlt);
+            await App.Settings.SetSetting("Theme", WdSettingsData.ThemeSetting.MicaAlt);
             OnThemeButtonLoaded(sender, e);
         }
 
         private async void OnFluentSelected(object sender, RoutedEventArgs e)
         {
-            await MainWindow.Settings.SetSetting("Theme", WdSettingsData.ThemeSetting.Fluent);
+            await App.Settings.SetSetting("Theme", WdSettingsData.ThemeSetting.Fluent);
             OnThemeButtonLoaded(sender, e);
         }
 
         private async void OnSystemSelected(object sender, RoutedEventArgs e)
         {
-            await MainWindow.Settings.SetSetting("Theme", WdSettingsData.ThemeSetting.System);
+            await App.Settings.SetSetting("Theme", WdSettingsData.ThemeSetting.System);
             OnThemeButtonLoaded(sender, e);
+        }
+
+        private async void OnDebugLogToggled(object sender, RoutedEventArgs e)
+        {
+            await App.Settings.SetSetting("DebugLoggingEnabled", (sender as ToggleSwitch).IsOn);
         }
 
         private void OpenAppData(object sender, RoutedEventArgs e)
@@ -37,9 +43,20 @@ namespace WinDurango.UI.Pages
             Process.Start(new ProcessStartInfo(App.DataDir) { UseShellExecute = true });
         }
 
+
+        private void OnDebugLogToggleLoaded(object sender, RoutedEventArgs e)
+        {
+            if (Debugger.IsAttached)
+            {
+                (sender as ToggleSwitch).IsEnabled = false;
+                (sender as ToggleSwitch).IsOn = true;
+                (sender as ToggleSwitch).OnContent = "Enable debug logging (currently debugging)";
+            }
+        }
+
         private void OnThemeButtonLoaded(object sender, RoutedEventArgs e)
         {
-            switch (MainWindow.Settings.Settings.Theme)
+            switch (App.Settings.Settings.Theme)
             {
                 case WdSettingsData.ThemeSetting.Fluent:
                     themeButton.Content = "Fluent";
